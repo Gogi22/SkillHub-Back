@@ -1,0 +1,36 @@
+### Login
+POST https://{{identity}}/auth/login
+Content-Type: application/json
+
+{
+  "userName": "GogiMamu",
+  "password": "GogiMamu1@"
+}
+
+### Register
+POST https://{{identity}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "GogiMamu",
+  "Email": "gogi@gmail.com",
+  "Role": "freelancer",
+  "password": "GogiMamu1@"
+}
+
+### Register Bad Request
+POST https://{{api}}/auth/register
+Content-Type: application/json
+
+{
+  "userName": "gogi",
+  "password": "Test1",
+  "confirmPassword": "Test1",
+  "firstName": "Gogi",
+  "lastName": "Mamutchadze",
+  "email": "gogi@gmail.com",
+  "phoneNumber": "597800801df",
+  "role": "Freelancer"
+}
+
+
