@@ -5,16 +5,19 @@ using Common.Options;
 using FluentValidation;
 using IdentityServer.Entities;
 using IdentityServer.Events;
+using IdentityServer.Extensions;
 using IdentityServer.Helpers;
 using IdentityServer.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServer.Features.Auth;
 
 public class Register
 {
-    public class Command : IRequest<Result<string>>
+    private const string QueueName = "registered_users";
+    public class Command : IRequest<Result<UserInfo>>
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
@@ -49,7 +52,7 @@ public class Register
         }
     }
 
-    public class Handler : IRequestHandler<Command, Result<string>>
+    public class Handler : IRequestHandler<Command, Result<UserInfo>>
     {
         private readonly UserDbContext _context;
         private readonly IEventProducer _eventProducer;
@@ -62,14 +65,14 @@ public class Register
             _eventProducer = eventProducer;
         }
 
-        public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken)
         {
             var userExists =
                 await _context.Users.AnyAsync(u => u.UserName == request.UserName || u.Email == request.Email,
                     cancellationToken);
             if (userExists)
             {
-                return Result.Failure<string>(DomainErrors.Register.UserAlreadyExists);
+                return Result.Failure<UserInfo>(DomainErrors.Register.UserAlreadyExists);
             }
 
             var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(request.Password);
@@ -86,12 +89,12 @@ public class Register
 
             var userRegisteredEvent = new UserRegisteredEvent(user);
 
-            _eventProducer.Publish(userRegisteredEvent);
+            _eventProducer.Publish(userRegisteredEvent, QueueName);
 
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 
-            return Result.Success(token);
+            return Result.Success(new UserInfo(user.UserName, claims.GetRole(), token));
         }
     }
 }

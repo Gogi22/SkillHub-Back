@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Common;
 using Common.Options;
 using FluentValidation;
+using IdentityServer.Extensions;
 using IdentityServer.Helpers;
 using IdentityServer.Infrastructure;
 using MediatR;
@@ -11,24 +12,10 @@ namespace IdentityServer.Features.Auth;
 
 public class Login
 {
-    public class Command : IRequest<Result<Response>>
+    public class Command : IRequest<Result<UserInfo>>
     {
         public string UserName { get; set; } = null!;
         public string Password { get; set; } = null!;
-    }
-
-    public class Response
-    {
-        public Response(string userName, string role, string token)
-        {
-            UserName = userName;
-            Role = role;
-            Token = token;
-        }
-
-        public string UserName { get; set; }
-        public string Role { get; set; }
-        public string Token { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -40,7 +27,7 @@ public class Login
         }
     }
 
-    public class Handler : IRequestHandler<Command, Result<Response>>
+    public class Handler : IRequestHandler<Command, Result<UserInfo>>
     {
         private readonly UserDbContext _context;
         private readonly JwtSettings _jwtSettings;
@@ -51,7 +38,7 @@ public class Login
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
         }
 
-        public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken)
         {
             var users = await _context.Users.Include(u => u.Claims).ToListAsync(cancellationToken);
             var user = users.FirstOrDefault(x => x.UserName == request.UserName) ??
@@ -59,7 +46,7 @@ public class Login
             if (user == null ||
                 !PasswordManager.IsValidPassword(request.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return Result.Failure<Response>(DomainErrors.Login.UserDoesNotExist);
+                return Result.Failure<UserInfo>(DomainErrors.Login.UserDoesNotExist);
             }
 
             var claims = user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList();
@@ -67,7 +54,7 @@ public class Login
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 
             return Result.Success(
-                new Response(user.UserName, claims.First(c => c.Type == ClaimTypes.Role).Value, token));
+                new UserInfo(user.UserName, user.Claims.GetRole(), token));
         }
     }
 }

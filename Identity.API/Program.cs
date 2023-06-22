@@ -1,5 +1,7 @@
 using Common.Extensions;
+using IdentityServer.Attributes;
 using IdentityServer.Extensions;
+using IdentityServer.Features;
 using IdentityServer.Features.Auth;
 using IdentityServer.Middleware;
 using MediatR;
@@ -19,7 +21,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddJwtSettings(builder.Configuration);
 
-
 var app = builder.Build();
 
 app.UseAuthentication();
@@ -32,5 +33,9 @@ app.MapPost("/auth/register",
 
 app.MapPost("/auth/login",
     async ([FromServices] IMediator mediator, Login.Command model) => await mediator.Send(model));
+
+app.MapGet("/user",
+    [ServiceFilter(typeof(ValidateInternalServiceMiddleware))]
+    async ([FromServices] IMediator mediator, [FromBody]GetUser.Query query) => await mediator.Send(query));
 
 await app.RunAsync();

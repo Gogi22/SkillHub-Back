@@ -21,12 +21,11 @@ public class EventProducer : IDisposable, IEventProducer
         _connection.Dispose();
     }
 
-    public void Publish(IIntegrationEvent @event)
+    public void Publish(IIntegrationEvent @event, string queueName)
     {
         if (null == @event)
             throw new ArgumentNullException(nameof(@event));
 
-        const string queueName = "registered_users";
         var serializedJson = JsonSerializer.Serialize(@event, @event.GetType());
         var data = Encoding.UTF8.GetBytes(serializedJson);
 

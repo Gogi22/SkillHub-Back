@@ -18,19 +18,11 @@ Content-Type: application/json
   "password": "GogiMamu1@"
 }
 
-### Register Bad Request
-POST https://{{api}}/auth/register
+### Get User Internally
+GET https://{{identity}}/user
+Secret: "this is my custom Secret key for internal authorization"
 Content-Type: application/json
 
 {
-  "userName": "gogi",
-  "password": "Test1",
-  "confirmPassword": "Test1",
-  "firstName": "Gogi",
-  "lastName": "Mamutchadze",
-  "email": "gogi@gmail.com",
-  "phoneNumber": "597800801df",
-  "role": "Freelancer"
+  "UserId": "4ff3fa3b-e69a-47a5-83b6-39a2fe7d4d2a"
 }
-
-
