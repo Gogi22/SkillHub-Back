@@ -1,15 +1,20 @@
-using FluentAssertions;
 using IdentityServer.Features.Auth;
 
 namespace Identity.API.Tests.Features.Auth;
 
 public class LoginValidatorTests
 {
+    private readonly Login.Validator _validator;
+
+    public LoginValidatorTests()
+    {
+        _validator = new Login.Validator();
+    }
+
     [Fact]
     public void Validator_UserNameNotEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var validator = new Login.Validator();
         var command = new Login.Command
         {
             UserName = "", // Empty value
@@ -17,7 +22,7 @@ public class LoginValidatorTests
         };
 
         // Act
-        var result = validator.Validate(command);
+        var result = _validator.Validate(command);
 
         // Assert
         result.IsValid.Should().BeFalse();
@@ -28,7 +33,6 @@ public class LoginValidatorTests
     public void Validator_PasswordNotEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var validator = new Login.Validator();
         var command = new Login.Command
         {
             UserName = "username",
@@ -36,7 +40,7 @@ public class LoginValidatorTests
         };
 
         // Act
-        var result = validator.Validate(command);
+        var result = _validator.Validate(command);
 
         // Assert
         result.IsValid.Should().BeFalse();
@@ -47,7 +51,6 @@ public class LoginValidatorTests
     public void Validator_ValidCommand_ShouldNotHaveValidationError()
     {
         // Arrange
-        var validator = new Login.Validator();
         var command = new Login.Command
         {
             UserName = "username",
@@ -55,7 +58,7 @@ public class LoginValidatorTests
         };
 
         // Act
-        var result = validator.Validate(command);
+        var result = _validator.Validate(command);
 
         // Assert
         result.IsValid.Should().BeTrue();

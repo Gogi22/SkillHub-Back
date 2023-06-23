@@ -1,10 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Common.Options;
-using FluentAssertions;
 using Identity.API.Tests.TestingHelpers;
 using IdentityServer.Helpers;
 using Microsoft.Extensions.Configuration;
+using Xunit.Abstractions;
 
 namespace Identity.API.Tests.Helpers;
 
@@ -12,16 +10,15 @@ public class PasswordManagerTests
 {
     private readonly JwtSettings _jwtSettings;
 
-    public PasswordManagerTests()
+    public PasswordManagerTests(ITestOutputHelper testOutputHelper)
     {
         var configuration = new ConfigurationBuilder()
-                .SetBasePath("/Users/mamutgog/RiderProjects/SkillHub-Back/src/Identity.API")
-                .AddJsonFile("appsettings.json")
-                .Build();
-
+            .SetBasePath("/Users/mamutgog/RiderProjects/SkillHub-Back/src/Identity.API")
+            .AddJsonFile("appsettings.json")
+            .Build();
         _jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
     }
-    
+
     [Fact]
     public void CreatePasswordHash_ValidPassword_ReturnsNonEmptyHashAndSalt()
     {
@@ -30,7 +27,6 @@ public class PasswordManagerTests
 
         // Act
         var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(password);
-
         passwordHash.Should().NotBeNull();
         passwordHash.Should().NotBeEmpty();
         passwordSalt.Should().NotBeNull();
@@ -81,7 +77,7 @@ public class PasswordManagerTests
         Assert.NotEmpty(token);
 
         // Verify claims
-        var tokenClaims = token.GetClaims();
+        var tokenClaims = token.ToClaims();
         tokenClaims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "Freelancer");
     }
 }
