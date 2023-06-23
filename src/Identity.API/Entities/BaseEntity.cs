@@ -26,7 +26,7 @@ public abstract class BaseAggregateRoot<TKey> : BaseEntity<TKey>, IAggregateRoot
 
 public abstract class BaseEntity<TKey>
 {
-    public TKey Id { get; }
+    public TKey Id { get; } = default(TKey)!;
 
     public override bool Equals(object? obj)
     {
