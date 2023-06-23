@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillHub.API", "SkillHub.API\SkillHub.API.csproj", "{048BCCAF-F2CB-4CE8-8D3D-15B1942FCE28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillHub.API", "src\SkillHub.API\SkillHub.API.csproj", "{048BCCAF-F2CB-4CE8-8D3D-15B1942FCE28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Identity.API\Identity.API.csproj", "{CFF712F8-8342-44E3-B525-68A33CFEDC01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "src\Identity.API\Identity.API.csproj", "{CFF712F8-8342-44E3-B525-68A33CFEDC01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{52B5CAF3-04D2-4ADB-A29C-38333CF44493}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common.csproj", "{52B5CAF3-04D2-4ADB-A29C-38333CF44493}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
