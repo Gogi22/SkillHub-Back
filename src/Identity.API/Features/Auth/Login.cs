@@ -38,7 +38,7 @@ public class Login
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
         }
 
-        public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken = default)
         {
             var users = await _context.Users.Include(u => u.Claims).ToListAsync(cancellationToken);
             var user = users.FirstOrDefault(x => x.UserName == request.UserName) ??

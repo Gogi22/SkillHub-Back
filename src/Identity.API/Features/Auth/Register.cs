@@ -65,7 +65,7 @@ public class Register
             _eventProducer = eventProducer;
         }
 
-        public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken = default)
         {
             var userExists =
                 await _context.Users.AnyAsync(u => u.UserName == request.UserName || u.Email == request.Email,

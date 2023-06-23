@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "src\Identit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common.csproj", "{52B5CAF3-04D2-4ADB-A29C-38333CF44493}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API.Tests", "test\Identity.API.Tests\Identity.API.Tests.csproj", "{3EC7EF98-4C0E-4109-85BC-46EE7C79E663}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{52B5CAF3-04D2-4ADB-A29C-38333CF44493}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52B5CAF3-04D2-4ADB-A29C-38333CF44493}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52B5CAF3-04D2-4ADB-A29C-38333CF44493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EC7EF98-4C0E-4109-85BC-46EE7C79E663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EC7EF98-4C0E-4109-85BC-46EE7C79E663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EC7EF98-4C0E-4109-85BC-46EE7C79E663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EC7EF98-4C0E-4109-85BC-46EE7C79E663}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

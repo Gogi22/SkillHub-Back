@@ -29,13 +29,13 @@ app.UseAuthorization();
 app.ConfigureExceptionHandler(app.Environment);
 
 app.MapPost("/auth/register",
-    async ([FromServices] IMediator mediator, Register.Command model) => await mediator.Send(model));
+    async ([FromServices] IMediator mediator, Register.Command model, CancellationToken cancellationToken) => await mediator.Send(model, cancellationToken));
 
 app.MapPost("/auth/login",
-    async ([FromServices] IMediator mediator, Login.Command model) => await mediator.Send(model));
+    async ([FromServices] IMediator mediator, Login.Command model, CancellationToken cancellationToken) => await mediator.Send(model, cancellationToken));
 
 app.MapGet("/user",
     [ServiceFilter(typeof(ValidateInternalServiceMiddleware))]
-    async ([FromServices] IMediator mediator, [FromBody]GetUser.Query query) => await mediator.Send(query));
+    async ([FromServices] IMediator mediator, [FromBody]GetUser.Query query, CancellationToken cancellationToken) => await mediator.Send(query, cancellationToken));
 
 await app.RunAsync();
