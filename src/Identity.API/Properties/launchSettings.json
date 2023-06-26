@@ -16,7 +16,15 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:6001;http://localhost:6002",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Microservices__Secret": "this is my custom Secret key for internal authorization",
+        "JwtSettings__Issuer": "https://localhost:6001",
+        "JwtSettings__Audience": "https://localhost:5001",
+        "JwtSettings__Key": "this is my custom Secret key for authentication",
+        "RabbitMQ__Host": "localhost",
+        "RabbitMQ__UserName": "SkillHubUSer",
+        "RabbitMQ__Password": "SkillHubPassword",
+        "RabbitMQ__VirtualHost": "/"
       }
     },
     "IIS Express": {

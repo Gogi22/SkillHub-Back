@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  identity-api:
+    build:
+      context: .
+      dockerfile: src/Identity.API/Dockerfile
+    ports:
+      - "7654:80"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    env_file:
+      env.development
+    networks:
+      - skillHubNetwork
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # AMQP port
+      - "15672:15672"  # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=SkillHubUser
+      - RABBITMQ_DEFAULT_PASS=SkillHubPassword
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    platform: linux/amd64
+    environment:
+      - SA_PASSWORD=YourPassword123!
+      - ACCEPT_EULA=Y
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - skillHubNetwork
+
+volumes:
+  sqlserver_data:
+
+networks:
+  skillHubNetwork:
+    driver: bridge

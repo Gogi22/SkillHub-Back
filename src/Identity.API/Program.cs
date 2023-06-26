@@ -3,6 +3,7 @@ using IdentityServer.Attributes;
 using IdentityServer.Extensions;
 using IdentityServer.Features;
 using IdentityServer.Features.Auth;
+using IdentityServer.Infrastructure;
 using IdentityServer.Middleware;
 using MediatR;
 using MediatR.Extensions.FluentValidation.AspNetCore;
@@ -36,18 +37,21 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.ConfigureExceptionHandler(app.Environment);
+app.ApplyMigrations<UserDbContext>();
 
 app.MapPost("/auth/register",
-    async ([FromServices] IMediator mediator, Register.Command model, CancellationToken cancellationToken) =>
-        await mediator.Send(model, cancellationToken));
+    async ([FromServices] IMediator mediator, Register.Command model, CancellationToken cancellationToken) => 
+        (await mediator.Send(model, cancellationToken)).ToActionResult());
+
 
 app.MapPost("/auth/login",
     async ([FromServices] IMediator mediator, Login.Command model, CancellationToken cancellationToken) =>
-        await mediator.Send(model, cancellationToken));
+        (await mediator.Send(model, cancellationToken)).ToActionResult());
+
 
 app.MapGet("/user",
     [ServiceFilter(typeof(ValidateInternalServiceMiddleware))]
     async ([FromServices] IMediator mediator, [FromBody] GetUser.Query query, CancellationToken cancellationToken) =>
-        await mediator.Send(query, cancellationToken)).ExcludeFromDescription();
+        (await mediator.Send(query, cancellationToken)).ToActionResult()).ExcludeFromDescription();
 
 await app.RunAsync();

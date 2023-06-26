@@ -7,22 +7,34 @@ namespace IdentityServer;
 
 public class EventProducer : IDisposable, IEventProducer
 {
-    private readonly IConnection _connection;
+    private readonly IConnection? _connection;
 
     public EventProducer(ConnectionFactory connectionFactory)
     {
-        _connection = connectionFactory.CreateConnection() ??
-                      throw new ArgumentNullException(nameof(connectionFactory));
+        try
+        {
+            _connection = connectionFactory.CreateConnection();
+        }
+        catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
+        {
+            Console.WriteLine(ex);
+        }
     }
 
     public void Dispose()
     {
-        _connection.Close();
-        _connection.Dispose();
+        _connection?.Close();
+        _connection?.Dispose();
     }
 
     public void Publish(IIntegrationEvent @event, string queueName)
     {
+        if (_connection is null)
+        {
+            Console.WriteLine("RabbitMQ isn't connected.");
+            return;    
+        }
+        
         if (null == @event)
             throw new ArgumentNullException(nameof(@event));
 

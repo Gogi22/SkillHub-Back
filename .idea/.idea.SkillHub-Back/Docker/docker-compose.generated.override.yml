@@ -1,0 +1,28 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.9"
+services:
+  identity-api:
+    build:
+      context: "/Users/mamutgog/RiderProjects/SkillHub-Back"
+      dockerfile: "src/Identity.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "/riderDebugger/linux-arm64/dotnet/dotnet"
+    - "/riderDebugger/JetBrains.Debugger.Worker.exe"
+    - "--mode=server"
+    - "--frontend-port=57100"
+    - "--backend-port=57300"
+    environment:
+      RIDER_DEBUGGER_LOG_DIR: "/riderLogs"
+      RESHARPER_LOG_CONF: "/riderLogsConf/backend-log.xml"
+    image: "identity.api:dev"
+    ports:
+    - "57000:57100"
+    - "57200:57300"
+    volumes:
+    - "/Users/mamutgog/RiderProjects/SkillHub-Back/src/Identity.API:/app:rw"
+    - "/Users/mamutgog/.local/share/JetBrains/RiderRemoteDebugger/2023.1.2/LinuxArm64:/riderDebugger"
+    - "/Users/mamutgog/Library/Application Support/JetBrains/Toolbox/apps/Rider/ch-0/231.9011.39/Rider.app/Contents/bin:/riderLogsConf"
+    - "/Users/mamutgog/Library/Logs/JetBrains/Rider2023.1/DebuggerWorker/JetBrains.Debugger.Worker.2023_6_26_18_41_20:/riderLogs:rw"
+    working_dir: "/app"

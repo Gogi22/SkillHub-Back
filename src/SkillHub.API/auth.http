@@ -1,5 +1,5 @@
 ### Login
-POST https://{{identity}}/auth/login
+POST {{protocol}}{{identity}}/auth/login
 Content-Type: application/json
 
 {
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### Register
-POST https://{{identity}}/auth/register
+POST {{protocol}}{{identity}}/auth/register
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Get User Internally
-GET https://{{identity}}/user
+GET {protocol}{{identity}}/user
 Secret: "this is my custom Secret key for internal authorization"
 Content-Type: application/json
 

@@ -9,9 +9,10 @@ public static class InfrastructureExtensions
     {
         services.AddDbContext<UserDbContext>(options =>
         {
-            if (configuration.GetConnectionString("SqlServerConnection") != null)
+            var x = bool.TryParse(configuration["UseInMemoryDatabase"], out var inMemory);
+            if (x && !inMemory)
             {
-                options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection")!);
+                options.UseSqlServer(configuration["SqlServerConnectionString"]!);
             }
             else
             {

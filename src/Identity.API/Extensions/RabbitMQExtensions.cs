@@ -12,7 +12,7 @@ public static class RabbitMqExtensions
             HostName = configuration["RabbitMQ:Host"],
             Password = configuration["RabbitMQ:Password"],
             UserName = configuration["RabbitMQ:UserName"],
-            VirtualHost = configuration["RabbitMQ:VirtualHost"]
+            VirtualHost = configuration["RabbitMQ:VirtualHost"] ?? "/"
         }));
         return services;
     }
