@@ -1,7 +1,4 @@
 using System.Security.Claims;
-using System.Text;
-using Application.Entities;
-using Application.Options;
 using MediatR;
 using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -45,37 +42,12 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavi
 //     });
 //     options.OperationFilter<SecurityRequirementsOperationFilter>();
 // });
-//
-// builder.Services.AddIdentity<User, IdentityRole>(options =>
-//     {
-//         // options.Password.RequireDigit = false;
-//         options.Password.RequiredLength = 6;
-//         // options.Password.RequireNonAlphanumeric = false;
-//         // options.Password.RequireUppercase = false;
-//         // options.Password.RequireLowercase = false;
-//     })
-//     .AddEntityFrameworkStores<UserDbContext>();
-//
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuerSigningKey = true,
-//             IssuerSigningKey =
-//                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]!)),
-//             ValidateIssuer = false,
-//             ValidateAudience = false
-//         };
-//     });
-//
-// builder.Services.AddDataProtection()
-//     .PersistKeysToFileSystem(new DirectoryInfo(@"../keys/"))
-//     .SetApplicationName("SkillHub-App");
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("admin", policy => policy.RequireClaim(ClaimTypes.Role, "admin"));
+    options.AddPolicy("admin", policy => policy.RequireClaim(ClaimTypes.Role, "admin").RequireAuthenticatedUser());
+    options.AddPolicy("freelancer", policy => policy.RequireClaim(ClaimTypes.Role, "freelancer").RequireAuthenticatedUser());
+    options.AddPolicy("client", policy => policy.RequireClaim(ClaimTypes.Role, "client").RequireAuthenticatedUser());
 });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
