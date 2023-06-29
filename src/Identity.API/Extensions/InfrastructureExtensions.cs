@@ -1,7 +1,7 @@
-using IdentityServer.Infrastructure;
+using Identity.API.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Extensions;
+namespace Identity.API.Extensions;
 
 public static class InfrastructureExtensions
 {

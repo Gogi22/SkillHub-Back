@@ -1,6 +1,6 @@
 using Common;
 
-namespace IdentityServer.Entities;
+namespace Identity.API.Entities;
 
 public class UserClaim : BaseEntity<int>
 {

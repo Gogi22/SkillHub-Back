@@ -32,7 +32,7 @@ public static class InfrastructureExtensions
             },
             configuration["RabbitMQ:Queues:UserRegistered"]
         ));
-        
+
         return services;
     }
 }

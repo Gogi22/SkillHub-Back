@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace IdentityServer.Entities;
+namespace Identity.API.Entities;
 
 public abstract class BaseAggregateRoot<TKey> : BaseEntity<TKey>, IAggregateRoot
 {
@@ -26,7 +26,7 @@ public abstract class BaseAggregateRoot<TKey> : BaseEntity<TKey>, IAggregateRoot
 
 public abstract class BaseEntity<TKey>
 {
-    public TKey Id { get; } = default(TKey)!;
+    public TKey Id { get; } = default!;
 
     public override bool Equals(object? obj)
     {

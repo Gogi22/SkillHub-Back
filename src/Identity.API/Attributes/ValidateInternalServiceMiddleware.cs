@@ -2,7 +2,7 @@ using Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace IdentityServer.Attributes;
+namespace Identity.API.Attributes;
 
 public class ValidateInternalServiceMiddleware : ActionFilterAttribute
 {
@@ -16,7 +16,7 @@ public class ValidateInternalServiceMiddleware : ActionFilterAttribute
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var secret = _configuration["Microservices:Secret"];
-        
+
         if (context.HttpContext.Request.Headers.TryGetValue("Secret", out var requestSecret))
         {
             if (requestSecret != secret)
@@ -27,7 +27,7 @@ public class ValidateInternalServiceMiddleware : ActionFilterAttribute
         }
         else
         {
-            context.Result =  new ObjectResult(Result.Failure(DomainErrors.InternalRequest.SecretHeaderMissing));
+            context.Result = new ObjectResult(Result.Failure(DomainErrors.InternalRequest.SecretHeaderMissing));
             return;
         }
 

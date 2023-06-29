@@ -2,13 +2,13 @@ using System.Security.Claims;
 using Common;
 using Common.Options;
 using FluentValidation;
-using IdentityServer.Extensions;
-using IdentityServer.Helpers;
-using IdentityServer.Infrastructure;
+using Identity.API.Extensions;
+using Identity.API.Helpers;
+using Identity.API.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Features.Auth;
+namespace Identity.API.Features.Auth;
 
 public class Login
 {

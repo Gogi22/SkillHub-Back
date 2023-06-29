@@ -10,8 +10,10 @@ public static class AuthorizationExtensions
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policy.Freelancer, policy => policy.RequireClaim(ClaimTypes.Role, Role.Freelancer.ToString()).RequireAuthenticatedUser());
-            options.AddPolicy(Policy.Client, policy => policy.RequireClaim(ClaimTypes.Role, Role.Client.ToString()).RequireAuthenticatedUser());
+            options.AddPolicy(Policy.Freelancer,
+                policy => policy.RequireClaim(ClaimTypes.Role, Role.Freelancer.ToString()).RequireAuthenticatedUser());
+            options.AddPolicy(Policy.Client,
+                policy => policy.RequireClaim(ClaimTypes.Role, Role.Client.ToString()).RequireAuthenticatedUser());
         });
 
         return services;

@@ -1,8 +1,8 @@
 using Common;
-using IdentityServer.Entities;
-using IdentityServer.Features;
-using IdentityServer.Helpers;
-using IdentityServer.Infrastructure;
+using Identity.API.Entities;
+using Identity.API.Features;
+using Identity.API.Helpers;
+using Identity.API.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.API.Tests.Features.Auth;
@@ -35,7 +35,7 @@ public class GetUserTests : IDisposable
         const string userName = "test_user";
         const string password = "Password1@";
         const Role role = Role.Freelancer;
-        
+
         var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(password);
         var user = new User(userName, email, passwordHash, passwordSalt, new List<UserClaim>
         {

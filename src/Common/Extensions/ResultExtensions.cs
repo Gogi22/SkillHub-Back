@@ -8,5 +8,4 @@ public static class ResultExtensions
     {
         return !result.IsSuccess ? Results.BadRequest(result) : Results.Ok(result);
     }
-    
 }

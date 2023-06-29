@@ -2,29 +2,28 @@ namespace SkillHub.API.Entities;
 
 public class Freelancer
 {
-    
     public string UserId { get; set; } = null!;
 
     public string UserName { get; set; } = null!;
-    
+
     public string Email { get; set; } = null!;
-    
+
     public string? Bio { get; set; }
-    
+
     public string? ProfileImageId { get; set; }
 
     public ICollection<UserSkill> UserSkills { get; set; } = null!;
-    
+
     public ICollection<Review> Reviews { get; set; } = null!;
     // add a method that adds a review to the user's reviews collection
-    
+
     public void AddReview(string reviewerId, double rating, string reviewText)
     {
         // check if the user has actually worked with the reviewer
         if (Reviews.Any(r => r.UserId == reviewerId))
         {
             throw new Exception("You have already reviewed this user");
-        }   
+        }
     }
 }
 
@@ -33,7 +32,7 @@ public class Client
     public string UserId { get; set; } = null!;
 
     public string UserName { get; set; } = null!;
-    
+
     public string Email { get; set; } = null!;
 }
 
@@ -54,9 +53,8 @@ public class Project
     public decimal Budget { get; set; }
     public ProjectStatus ProjectStatus { get; set; }
     public string CreatorId { get; set; }
-    
-    public Freelancer Creator { get; set; } = null!;
 
+    public Freelancer Creator { get; set; } = null!;
 }
 
 public enum ProjectStatus
@@ -69,7 +67,8 @@ public enum ProjectStatus
 
 public class Proposal
 {
-    public Proposal(int proposalId, string freelancerId, int projectId, string userId, string description, DateTime createdAt)
+    public Proposal(int proposalId, string freelancerId, int projectId, string userId, string description,
+        DateTime createdAt)
     {
         ProposalId = proposalId;
         ProjectId = projectId;
@@ -100,7 +99,6 @@ public class Skill
 
     public int SkillId { get; set; }
     public string Name { get; set; }
-
 }
 
 public class UserSkill
@@ -120,7 +118,8 @@ public class UserSkill
 
 public class Review
 {
-    public Review(int reviewId, string userId, int projectId, double rating, string reviewText, DateTime createdAt, Project project)
+    public Review(int reviewId, string userId, int projectId, double rating, string reviewText, DateTime createdAt,
+        Project project)
     {
         ReviewId = reviewId;
         UserId = userId;
@@ -141,4 +140,3 @@ public class Review
     public Freelancer Freelancer { get; set; } = null!;
     public Project Project { get; set; }
 }
-

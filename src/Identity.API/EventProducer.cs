@@ -2,8 +2,9 @@ using System.Text;
 using System.Text.Json;
 using Common;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
 
-namespace IdentityServer;
+namespace Identity.API;
 
 public class EventProducer : IDisposable, IEventProducer
 {
@@ -15,7 +16,7 @@ public class EventProducer : IDisposable, IEventProducer
         {
             _connection = connectionFactory.CreateConnection();
         }
-        catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
+        catch (BrokerUnreachableException ex)
         {
             Console.WriteLine(ex);
         }
@@ -32,9 +33,9 @@ public class EventProducer : IDisposable, IEventProducer
         if (_connection is null)
         {
             Console.WriteLine("RabbitMQ isn't connected.");
-            return;    
+            return;
         }
-        
+
         if (null == @event)
             throw new ArgumentNullException(nameof(@event));
 

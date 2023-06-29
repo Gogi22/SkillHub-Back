@@ -1,23 +1,23 @@
 using System.Security.Claims;
 using Common;
-using IdentityServer.Entities;
+using Identity.API.Entities;
 
-namespace IdentityServer.Extensions;
+namespace Identity.API.Extensions;
 
 public static class UserClaimExtensions
 {
     public static Role GetRole(this IEnumerable<UserClaim> claims)
     {
-         return claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.Role)?.ClaimValue ??
+        return claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.Role)?.ClaimValue ??
                throw new ArgumentNullException(nameof(ClaimTypes.Role));
     }
-    
+
     public static Role GetRole(this IEnumerable<Claim> claims)
     {
-         var roleString = claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value ??
-               throw new ArgumentNullException(nameof(ClaimTypes.Role));
+        var roleString = claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value ??
+                         throw new ArgumentNullException(nameof(ClaimTypes.Role));
 
-         return roleString.ToRole();
+        return roleString.ToRole();
     }
 
     public static Role ToRole(this string roleString)

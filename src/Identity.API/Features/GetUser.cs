@@ -1,12 +1,11 @@
-using System.Security.Claims;
 using Common;
 using FluentValidation;
-using IdentityServer.Extensions;
-using IdentityServer.Infrastructure;
+using Identity.API.Extensions;
+using Identity.API.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Features;
+namespace Identity.API.Features;
 
 public class GetUser
 {

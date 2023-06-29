@@ -1,5 +1,3 @@
-using System.Security.Claims;
-
 namespace Common.Events;
 
 public class UserRegisteredEvent : IIntegrationEvent

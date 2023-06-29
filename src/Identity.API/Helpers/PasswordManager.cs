@@ -5,7 +5,7 @@ using System.Text;
 using Common.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace IdentityServer.Helpers;
+namespace Identity.API.Helpers;
 
 public static class PasswordManager
 {

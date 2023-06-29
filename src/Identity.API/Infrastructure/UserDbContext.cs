@@ -1,7 +1,7 @@
-using IdentityServer.Entities;
+using Identity.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Infrastructure;
+namespace Identity.API.Infrastructure;
 
 public class UserDbContext : DbContext
 {

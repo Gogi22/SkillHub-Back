@@ -2,9 +2,6 @@ using System.Security.Claims;
 using Carter;
 using Common;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SkillHub.API.Entities;
-using SkillHub.API.Features.Reviews.Queries;
 using SkillHub.API.Infrastructure;
 
 namespace SkillHub.API.Features.Reviews.Commands;
@@ -16,7 +13,7 @@ public class WriteReview : ICarterModule
         app.MapPost("api/review",
                 (IMediator mediator, Command request, ClaimsPrincipal claimsPrincipal) =>
                 {
-                    var userId = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value 
+                    var userId = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
                                  ?? throw new Exception();
                     request.UserId = userId;
                     return mediator.Send(request);
@@ -27,7 +24,7 @@ public class WriteReview : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization();
     }
-    
+
     public class Command : IRequest<Result>
     {
         internal string UserId { get; set; } = null!;
@@ -35,7 +32,7 @@ public class WriteReview : ICarterModule
         public double Rating { get; set; }
         public string? ReviewText { get; set; }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly ApiDbContext _context;

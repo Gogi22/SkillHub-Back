@@ -1,6 +1,6 @@
 using Common.Options;
+using Identity.API.Helpers;
 using Identity.API.Tests.TestingHelpers;
-using IdentityServer.Helpers;
 using Microsoft.Extensions.Configuration;
 using Xunit.Abstractions;
 

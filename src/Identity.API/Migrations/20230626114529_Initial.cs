@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace IdentityServer.Migrations
+namespace Identity.API.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

@@ -1,6 +1,6 @@
 using Common;
 
-namespace IdentityServer.Features.Auth;
+namespace Identity.API.Features.Auth;
 
 public class UserInfo
 {

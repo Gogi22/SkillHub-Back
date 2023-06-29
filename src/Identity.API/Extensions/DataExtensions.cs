@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Extensions;
+namespace Identity.API.Extensions;
 
 public static class DataExtensions
 {
@@ -10,13 +10,13 @@ public static class DataExtensions
         {
             return app;
         }
-        
+
         using var scope = app.Services.CreateScope();
-        
+
         var secondsPassed = 0;
         var retryDelay = TimeSpan.FromSeconds(10);
         const int maxSeconds = 60;
-        
+
         while (true)
         {
             try
@@ -31,13 +31,13 @@ public static class DataExtensions
                 {
                     throw;
                 }
-                
+
                 retryDelay += TimeSpan.FromSeconds(10);
                 Thread.Sleep(retryDelay);
                 secondsPassed += retryDelay.Seconds;
             }
         }
-        
+
         return app;
     }
 }

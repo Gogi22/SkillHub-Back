@@ -12,8 +12,8 @@ POST {{identity}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "Gogimamu7",
-  "Email": "gogimamu7@gmail.com",
+  "username": "Gogimamu8",
+  "Email": "gogimamu8@gmail.com",
   "Role": 1,
   "password": "GogiMamu1@"
 }

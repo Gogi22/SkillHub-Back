@@ -1,4 +1,4 @@
-namespace IdentityServer.Entities;
+namespace Identity.API.Entities;
 
 public interface IDomainEvent
 {

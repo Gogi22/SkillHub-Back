@@ -10,28 +10,29 @@ namespace SkillHub.API.Services;
 
 public class RegisteredUserEventConsumer : BackgroundService
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly string _queueName;
     private readonly IModel _channel;
+    private readonly string _queueName;
+    private readonly IServiceProvider _serviceProvider;
 
-    public RegisteredUserEventConsumer(IServiceProvider serviceProvider, ConnectionFactory connectionFactory, string queueName)
+    public RegisteredUserEventConsumer(IServiceProvider serviceProvider, ConnectionFactory connectionFactory,
+        string queueName)
     {
         _serviceProvider = serviceProvider;
         _queueName = queueName;
         _channel = connectionFactory.CreateConnection().CreateModel();
     }
-    
+
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _channel.QueueDeclare(_queueName, true, false, false);
 
         var consumer = new EventingBasicConsumer(_channel);
-        
+
         consumer.Received += OnMessageReceived;
 
-        _channel.BasicConsume(queue: _queueName,
-            autoAck: false,
-            consumer: consumer);
+        _channel.BasicConsume(_queueName,
+            false,
+            consumer);
 
         return Task.CompletedTask;
     }
@@ -43,14 +44,14 @@ public class RegisteredUserEventConsumer : BackgroundService
             // using var scope = _serviceProvider.CreateScope();
             // var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             ProcessMessage(null, ea.Body.ToArray());
-            _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+            _channel.BasicAck(ea.DeliveryTag, false);
         }
         catch (Exception)
         {
-            _channel.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
+            _channel.BasicNack(ea.DeliveryTag, false, true);
         }
     }
-    
+
     private static void ProcessMessage(ApiDbContext dbContext, byte[] body)
     {
         var message = JsonConvert.DeserializeObject<UserRegisteredEvent>(Encoding.UTF8.GetString(body));
@@ -68,7 +69,7 @@ public class RegisteredUserEventConsumer : BackgroundService
             Console.WriteLine("New client registered");
         }
     }
-    
+
     public override void Dispose()
     {
         _channel.Dispose();

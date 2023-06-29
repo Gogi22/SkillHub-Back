@@ -3,14 +3,14 @@ using Common;
 using Common.Events;
 using Common.Options;
 using FluentValidation;
-using IdentityServer.Entities;
-using IdentityServer.Extensions;
-using IdentityServer.Helpers;
-using IdentityServer.Infrastructure;
+using Identity.API.Entities;
+using Identity.API.Extensions;
+using Identity.API.Helpers;
+using Identity.API.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Features.Auth;
+namespace Identity.API.Features.Auth;
 
 public class Register
 {
@@ -30,7 +30,8 @@ public class Register
                 .NotEqual(p => p.Email)
                 .NotEqual(p => p.UserName)
                 .Matches("^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$")
-                .WithMessage("The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one symbol, and one digit.");
+                .WithMessage(
+                    "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one symbol, and one digit.");
             RuleFor(p => p.UserName)
                 .MinimumLength(6);
             RuleFor(p => p.Email)
@@ -48,7 +49,8 @@ public class Register
         private readonly JwtSettings _jwtSettings;
         private readonly string _queueName;
 
-        public Handler(UserDbContext context, JwtSettings jwtSettings, IEventProducer eventProducer, IConfiguration configuration)
+        public Handler(UserDbContext context, JwtSettings jwtSettings, IEventProducer eventProducer,
+            IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _jwtSettings = jwtSettings;
@@ -61,7 +63,7 @@ public class Register
             var userExists =
                 await _context.Users.AnyAsync(u => u.UserName == request.UserName || u.Email == request.Email,
                     cancellationToken);
-            
+
             if (userExists)
             {
                 return DomainErrors.Register.UserAlreadyExists;
@@ -90,5 +92,3 @@ public class Register
         }
     }
 }
-
-// TODO After all todos move everything to Identity.API namespace;

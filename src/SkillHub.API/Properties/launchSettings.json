@@ -6,7 +6,7 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:14676",
       "sslPort": 44345
-    } 
+    }
   },
   "profiles": {
     "SkillHub.API": {

@@ -1,7 +1,6 @@
 using Carter;
 using Common;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using SkillHub.API.Infrastructure;
 
 namespace SkillHub.API.Features.Reviews.Queries;
@@ -16,7 +15,7 @@ public class GetReviews : ICarterModule
             .WithTags(nameof(Command))
             .RequireAuthorization();
     }
-    
+
     public class Command : IRequest<Result<List<Response>>>
     {
         public string UserId { get; set; } = default!;
@@ -30,7 +29,7 @@ public class GetReviews : ICarterModule
         public string? ReviewText { get; set; }
         public DateTime CreatedAt { get; set; }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result<List<Response>>>
     {
         private readonly ApiDbContext _context;

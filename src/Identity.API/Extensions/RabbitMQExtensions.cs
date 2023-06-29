@@ -1,7 +1,7 @@
 using Common;
 using RabbitMQ.Client;
 
-namespace IdentityServer.Extensions;
+namespace Identity.API.Extensions;
 
 public static class RabbitMqExtensions
 {

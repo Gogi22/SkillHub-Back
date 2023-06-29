@@ -1,4 +1,4 @@
-using IdentityServer.Features.Auth;
+using Identity.API.Features.Auth;
 
 namespace Identity.API.Tests.Features.Auth;
 

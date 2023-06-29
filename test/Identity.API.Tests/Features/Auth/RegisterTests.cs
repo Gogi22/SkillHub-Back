@@ -1,10 +1,10 @@
 using Common;
 using Common.Options;
+using Identity.API.Entities;
+using Identity.API.Features.Auth;
+using Identity.API.Helpers;
+using Identity.API.Infrastructure;
 using Identity.API.Tests.TestingHelpers;
-using IdentityServer.Entities;
-using IdentityServer.Features.Auth;
-using IdentityServer.Helpers;
-using IdentityServer.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

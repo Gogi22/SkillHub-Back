@@ -1,9 +1,9 @@
 using Common;
-using IdentityServer.Entities;
+using Identity.API.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IdentityServer.Infrastructure.Configuration;
+namespace Identity.API.Infrastructure.Configuration;
 
 public class UserClaimConfiguration : IEntityTypeConfiguration<UserClaim>
 {

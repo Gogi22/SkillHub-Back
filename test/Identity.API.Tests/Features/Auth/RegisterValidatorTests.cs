@@ -1,5 +1,5 @@
 using Common;
-using IdentityServer.Features.Auth;
+using Identity.API.Features.Auth;
 
 namespace Identity.API.Tests.Features.Auth;
 
@@ -34,9 +34,10 @@ public class RegisterValidatorTests
     [Theory]
     [InlineData("", "Password1@", "test_user", Role.Client)]
     [InlineData("test@example.com", "", "test_user", Role.Freelancer)]
-    [InlineData("test@example.com", "password1@", "test_user",Role.Client)] // Password does not meet requirements
+    [InlineData("test@example.com", "password1@", "test_user", Role.Client)] // Password does not meet requirements
     [InlineData("test@example.com", "Password1", "test_user", Role.Freelancer)] // Password does not meet requirements
-    [InlineData("test@example.com", "Password1@", "test", Role.Freelancer)] // Username does not meet minimum length requirement
+    [InlineData("test@example.com", "Password1@", "test",
+        Role.Freelancer)] // Username does not meet minimum length requirement
     public void Validate_InvalidCommand_ReturnsFalse(string email, string password, string userName, Role role)
     {
         // Arrange
@@ -45,7 +46,7 @@ public class RegisterValidatorTests
             Email = email,
             Password = password,
             UserName = userName,
-            Role =  role
+            Role = role
         };
 
         // Act

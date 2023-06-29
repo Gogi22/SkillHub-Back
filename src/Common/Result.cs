@@ -4,7 +4,8 @@ public class Result
 {
     protected Result(bool isSuccess, params Error[] error)
     {
-        if (isSuccess && error.Length != 0 || !isSuccess && error.Length == 0 || !isSuccess && error[0] == Error.None)
+        if ((isSuccess && error.Length != 0) || (!isSuccess && error.Length == 0) ||
+            (!isSuccess && error[0] == Error.None))
         {
             throw new InvalidOperationException();
         }
@@ -26,8 +27,11 @@ public class Result
         return new Result(false, errors);
     }
 
-    public static implicit operator Result(Error[] errors) => Failure(errors);
-    
+    public static implicit operator Result(Error[] errors)
+    {
+        return Failure(errors);
+    }
+
     protected static Result<TValue> Success<TValue>(TValue value)
     {
         return new Result<TValue>(value, true, Array.Empty<Error>());
@@ -48,10 +52,18 @@ public class Result<TValue> : Result
 
     public TValue? Value { get; private set; }
 
-    public static implicit operator Result<TValue>(TValue value) => Success(value);
-    
-    public static implicit operator Result<TValue>(Error error) => Failure<TValue>(error);
-    
-    public static implicit operator Result<TValue>(Error[] errors) => Failure<TValue>(errors);
+    public static implicit operator Result<TValue>(TValue value)
+    {
+        return Success(value);
+    }
 
+    public static implicit operator Result<TValue>(Error error)
+    {
+        return Failure<TValue>(error);
+    }
+
+    public static implicit operator Result<TValue>(Error[] errors)
+    {
+        return Failure<TValue>(errors);
+    }
 }
