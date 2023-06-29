@@ -42,7 +42,7 @@ public class EventProducer : IDisposable, IEventProducer
         var data = Encoding.UTF8.GetBytes(serializedJson);
 
         using var channel = _connection.CreateModel();
-        channel.QueueDeclare(queueName, true, false);
+        channel.QueueDeclare(queueName, true, false, false);
 
         channel.BasicPublish(string.Empty, queueName, body: data);
     }

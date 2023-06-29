@@ -1,10 +1,11 @@
 using Common.Extensions;
+using Common.Middleware;
+using IdentityServer;
 using IdentityServer.Attributes;
 using IdentityServer.Extensions;
 using IdentityServer.Features;
 using IdentityServer.Features.Auth;
 using IdentityServer.Infrastructure;
-using IdentityServer.Middleware;
 using MediatR;
 using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
@@ -32,12 +33,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.ConfigureExceptionHandler(app.Environment);
-app.ApplyMigrations<UserDbContext>();
+app.ConfigureExceptionHandler(app.Environment.IsProduction());
+
+var inMemory = bool.Parse(builder.Configuration["UseInMemoryDatabase"]);
+app.ApplyMigrations<UserDbContext>(inMemory);
 
 app.MapPost("/auth/register",
     async ([FromServices] IMediator mediator, Register.Command model, CancellationToken cancellationToken) => 

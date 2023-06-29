@@ -24,5 +24,5 @@ services:
     - "/Users/mamutgog/RiderProjects/SkillHub-Back/src/Identity.API:/app:rw"
     - "/Users/mamutgog/.local/share/JetBrains/RiderRemoteDebugger/2023.1.2/LinuxArm64:/riderDebugger"
     - "/Users/mamutgog/Library/Application Support/JetBrains/Toolbox/apps/Rider/ch-0/231.9011.39/Rider.app/Contents/bin:/riderLogsConf"
-    - "/Users/mamutgog/Library/Logs/JetBrains/Rider2023.1/DebuggerWorker/JetBrains.Debugger.Worker.2023_6_26_18_41_20:/riderLogs:rw"
+    - "/Users/mamutgog/Library/Logs/JetBrains/Rider2023.1/DebuggerWorker/JetBrains.Debugger.Worker.2023_6_27_15_51_12:/riderLogs:rw"
     working_dir: "/app"

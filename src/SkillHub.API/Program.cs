@@ -1,79 +1,39 @@
-using System.Security.Claims;
-using MediatR;
+using Carter;
+using Common.Extensions;
+using Common.Middleware;
 using MediatR.Extensions.FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using SkillHub.API.Middleware;
-using Swashbuckle.AspNetCore.Filters;
+using SkillHub.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options => options.CustomSchemaIds(type => type.ToString()));
 
-// builder.Services.AddValidationSetup();
+builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddCarter();
+builder.Services.AddMediatR(config => { config.RegisterServicesFromAssembly(typeof(Program).Assembly); });
+builder.Services.AddFluentValidation(new[] { typeof(Program).Assembly });
 
-// builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddDbContext<UserDbContext>(options =>
-//     options.UseInMemoryDatabase("MyDB"));
-//
-// builder.Services.AddMediatR(config => { config.RegisterServicesFromAssembly(typeof(Login).Assembly); });
-//
-// builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-// builder.Services.AddSingleton<JwtSettings>(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
-//
-// builder.Services.AddHttpContextAccessor();
-// builder.Services.AddSwaggerGen(options =>
-// {
-//     options.CustomSchemaIds( type => type.ToString() );
-//     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-//     {
-//         Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-//         In = ParameterLocation.Header,
-//         Name = "Authorization",
-//         Type = SecuritySchemeType.ApiKey
-//     });
-//     options.OperationFilter<SecurityRequirementsOperationFilter>();
-// });
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("admin", policy => policy.RequireClaim(ClaimTypes.Role, "admin").RequireAuthenticatedUser());
-    options.AddPolicy("freelancer", policy => policy.RequireClaim(ClaimTypes.Role, "freelancer").RequireAuthenticatedUser());
-    options.AddPolicy("client", policy => policy.RequireClaim(ClaimTypes.Role, "client").RequireAuthenticatedUser());
-});
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
-builder.Services.AddAuthorization();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAuthorizationPolicies();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // app.UseSwagger();
-    // app.UseSwaggerUI();
-    app.UseDeveloperExceptionPage();
-}
-else
-{
-    app.ConfigureExceptionHandler();    
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.ConfigureExceptionHandler(app.Environment.IsProduction());
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
-app.MapGet("protected", () => "secret 2").RequireAuthorization("admin");;
+app.MapCarter();
 
 app.Run();

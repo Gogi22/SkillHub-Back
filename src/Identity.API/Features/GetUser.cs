@@ -17,7 +17,7 @@ public class GetUser
 
     public class Response
     {
-        public Response(string userId, string email, string userName, string role)
+        public Response(string userId, string email, string userName, Role role)
         {
             UserId = userId;
             Email = email;
@@ -28,7 +28,7 @@ public class GetUser
         public string UserId { get; }
         public string Email { get; }
         public string UserName { get; }
-        public string Role { get; }
+        public Role Role { get; }
     }
 
     public class Validator : AbstractValidator<Query>
@@ -54,11 +54,10 @@ public class GetUser
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
             if (user == null)
             {
-                return Result.Failure<Response>(DomainErrors.GetUser.UserDoesNotExist);
+                return DomainErrors.GetUser.UserDoesNotExist;
             }
 
-            return Result.Success(
-                new Response(user.Id, user.Email, user.UserName, user.Claims.GetRole()));
+            return new Response(user.Id, user.Email, user.UserName, user.Claims.GetRole());
         }
     }
 }

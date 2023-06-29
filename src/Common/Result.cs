@@ -1,5 +1,5 @@
 ﻿namespace Common;
-
+// TODO error array to hash set because of password validation
 public class Result
 {
     protected Result(bool isSuccess, params Error[] error)
@@ -26,12 +26,14 @@ public class Result
         return new Result(false, errors);
     }
 
-    public static Result<TValue> Success<TValue>(TValue value)
+    public static implicit operator Result(Error[] errors) => Failure(errors);
+    
+    protected static Result<TValue> Success<TValue>(TValue value)
     {
         return new Result<TValue>(value, true, Array.Empty<Error>());
     }
 
-    public static Result<TValue> Failure<TValue>(params Error[] errors)
+    protected static Result<TValue> Failure<TValue>(params Error[] errors)
     {
         return new Result<TValue>(default, false, errors);
     }
@@ -45,4 +47,11 @@ public class Result<TValue> : Result
     }
 
     public TValue? Value { get; private set; }
+
+    public static implicit operator Result<TValue>(TValue value) => Success(value);
+    
+    public static implicit operator Result<TValue>(Error error) => Failure<TValue>(error);
+    
+    public static implicit operator Result<TValue>(Error[] errors) => Failure<TValue>(errors);
+
 }

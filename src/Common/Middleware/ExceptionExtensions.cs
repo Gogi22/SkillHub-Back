@@ -1,13 +1,14 @@
 using System.Net;
-using Common;
 using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
-namespace IdentityServer.Middleware;
+namespace Common.Middleware;
 
 public static class ExceptionExtensions
 {
-    public static void ConfigureExceptionHandler(this WebApplication app, IWebHostEnvironment env)
+    public static void ConfigureExceptionHandler(this WebApplication app, bool isProduction)
     {
         app.UseExceptionHandler(appError =>
         {
@@ -25,11 +26,15 @@ public static class ExceptionExtensions
                     return;
                 }
 
-                if (env.IsProduction())
+                if (isProduction)
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     await context.Response.WriteAsJsonAsync(Result.Failure(new Error("InternalServerError",
                         "Internal server error.")));
+                }
+                else
+                {
+                    throw contextFeature?.Error ?? new Exception("An error occurred.");
                 }
             });
         });

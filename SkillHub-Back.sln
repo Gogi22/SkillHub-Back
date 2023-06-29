@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillHub.API", "src\SkillHub.API\SkillHub.API.csproj", "{048BCCAF-F2CB-4CE8-8D3D-15B1942FCE28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "src\Identity.API\Identity.API.csproj", "{CFF712F8-8342-44E3-B525-68A33CFEDC01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common.csproj", "{52B5CAF3-04D2-4ADB-A29C-38333CF44493}"
@@ -20,10 +18,6 @@ Global
 		{048BCCAF-F2CB-4CE8-8D3D-15B1942FCE28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{048BCCAF-F2CB-4CE8-8D3D-15B1942FCE28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{048BCCAF-F2CB-4CE8-8D3D-15B1942FCE28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{130DB74A-7DA1-4AD3-8BE6-1C935F01F27E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CFF712F8-8342-44E3-B525-68A33CFEDC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFF712F8-8342-44E3-B525-68A33CFEDC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFF712F8-8342-44E3-B525-68A33CFEDC01}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,8 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Application.Common;
+namespace SkillHub.API.Common;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,3 +11,5 @@ public abstract class ApiControllerBase : ControllerBase
 
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>()!;
 }
+
+// create a test feature to test this functionality

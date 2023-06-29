@@ -1,5 +1,5 @@
 ### Login
-POST {{protocol}}{{identity}}/auth/login
+POST {{identity}}/auth/login
 Content-Type: application/json
 
 {
@@ -8,18 +8,18 @@ Content-Type: application/json
 }
 
 ### Register
-POST {{protocol}}{{identity}}/auth/register
+POST {{identity}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "GogiMamu",
-  "Email": "gogi@gmail.com",
-  "Role": "freelancer",
+  "username": "Gogimamu5",
+  "Email": "gogimamu5@gmail.com",
+  "Role": 0,
   "password": "GogiMamu1@"
 }
 
 ### Get User Internally
-GET {protocol}{{identity}}/user
+GET {{identity}}/user
 Secret: "this is my custom Secret key for internal authorization"
 Content-Type: application/json
 

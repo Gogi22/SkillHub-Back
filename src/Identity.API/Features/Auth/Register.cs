@@ -1,28 +1,26 @@
-using System.Globalization;
 using System.Security.Claims;
 using Common;
+using Common.Events;
 using Common.Options;
 using FluentValidation;
 using IdentityServer.Entities;
-using IdentityServer.Events;
 using IdentityServer.Extensions;
 using IdentityServer.Helpers;
 using IdentityServer.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServer.Features.Auth;
 
 public class Register
 {
-    private const string QueueName = "registered_users";
+    private const string QueueName = "registered_users"; // TODO move to a config file
     public class Command : IRequest<Result<UserInfo>>
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string UserName { get; set; } = null!;
-        public string Role { get; set; } = null!;
+        public Role Role { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -30,7 +28,6 @@ public class Register
         public Validator()
         {
             RuleFor(p => p.Password)
-                .NotEmpty()
                 .NotEqual(p => p.Email)
                 .NotEqual(p => p.UserName)
                 .MinimumLength(8)
@@ -45,10 +42,10 @@ public class Register
                 .NotEmpty()
                 .EmailAddress();
             RuleFor(p => p.Role)
-                .NotNull()
-                .Must(role => string.Equals(role, "freelancer", StringComparison.OrdinalIgnoreCase) ||
-                              string.Equals(role, "client", StringComparison.OrdinalIgnoreCase))
-                .WithMessage("Role must be either 'freelancer' or 'Client'.");
+                .NotNull();
+            RuleFor(p => p.Role)
+                .Must(role => Enum.IsDefined(typeof(Role), role))
+                .WithMessage("Role must be either Freelancer or Client");
         }
     }
 
@@ -70,31 +67,36 @@ public class Register
             var userExists =
                 await _context.Users.AnyAsync(u => u.UserName == request.UserName || u.Email == request.Email,
                     cancellationToken);
+            
             if (userExists)
             {
-                return Result.Failure<UserInfo>(DomainErrors.Register.UserAlreadyExists);
+                return DomainErrors.Register.UserAlreadyExists;
             }
 
             var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(request.Password);
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Role, CultureInfo.CurrentCulture.TextInfo.ToTitleCase(request.Role))
+                new(ClaimTypes.Role, request.Role.ToString())
             };
 
             var user = new User(request.UserName, request.Email, passwordHash, passwordSalt,
-                claims.Select(uc => new UserClaim(uc.Type, uc.Value)).ToList());
+                claims.Select(uc => new UserClaim(uc.Type, uc.Value.ToRole())).ToList());
 
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var userRegisteredEvent = new UserRegisteredEvent(user);
+            var userRegisteredEvent = new UserRegisteredEvent(user.Id, user.Email, user.UserName, request.Role);
 
             _eventProducer.Publish(userRegisteredEvent, QueueName);
 
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 
-            return Result.Success(new UserInfo(user.UserName, claims.GetRole(), token));
+            return new UserInfo(user.UserName, claims.GetRole(), token);
         }
     }
 }
+
+// TODO change result error array to hashset,
+// and for password validation return same error message
+// After that commit move everything to Identity.API namespace;

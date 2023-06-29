@@ -33,9 +33,9 @@ public class GetUserTests : IDisposable
         // Arrange
         const string email = "test@example.com";
         const string userName = "test_user";
-        const string role = "Freelancer";
         const string password = "Password1@";
-
+        const Role role = Role.Freelancer;
+        
         var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(password);
         var user = new User(userName, email, passwordHash, passwordSalt, new List<UserClaim>
         {

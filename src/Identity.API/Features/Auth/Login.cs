@@ -46,15 +46,14 @@ public class Login
             if (user == null ||
                 !PasswordManager.IsValidPassword(request.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return Result.Failure<UserInfo>(DomainErrors.Login.UserDoesNotExist);
+                return DomainErrors.Login.UserDoesNotExist;
             }
 
-            var claims = user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList();
+            var claims = user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue.ToString())).ToList();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 
-            return Result.Success(
-                new UserInfo(user.UserName, user.Claims.GetRole(), token));
+            return new UserInfo(user.UserName, user.Claims.GetRole(), token);
         }
     }
 }

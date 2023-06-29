@@ -43,7 +43,7 @@ public class LoginTests : IDisposable
         const string userName = "gogi1@";
         const string email = "gogi@gmail.com";
         const string password = "password1@";
-        const string role = "Freelancer";
+        const Role role = Role.Freelancer;
 
         var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(password);
         var user1 = new User(userName, email, passwordHash, passwordSalt, new List<UserClaim>
@@ -75,7 +75,7 @@ public class LoginTests : IDisposable
         var claims = result.Value?.Token.ToClaims();
         claims.Should().NotBeNull();
 
-        claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "Freelancer");
+        claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role.ToString());
         claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == userId);
     }
 
@@ -86,7 +86,7 @@ public class LoginTests : IDisposable
         const string userName = "gogi1@";
         const string email = "gogi@gmail.com";
         const string password = "password1@";
-        const string role = "Freelancer";
+        const Role role = Role.Freelancer;
 
         var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(password);
         var user1 = new User(userName, email, passwordHash, passwordSalt, new List<UserClaim>
@@ -118,7 +118,7 @@ public class LoginTests : IDisposable
         var claims = result.Value?.Token.ToClaims();
         claims.Should().NotBeNull();
 
-        claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "Freelancer");
+        claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role.ToString());
         claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == userId);
     }
 
@@ -129,7 +129,7 @@ public class LoginTests : IDisposable
         const string userName = "gogi1@";
         const string email = "gogi@gmail.com";
         const string password = "password1@";
-        const string role = "Freelancer";
+        const Role role = Role.Freelancer;
 
         var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(password);
 

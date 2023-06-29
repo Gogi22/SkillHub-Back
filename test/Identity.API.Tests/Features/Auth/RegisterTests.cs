@@ -43,7 +43,7 @@ public class RegisterTests : IDisposable
         const string email = "test@example.com";
         const string password = "Password1@";
         const string userName = "testUser";
-        const string role = "Freelancer";
+        const Role role = Role.Freelancer;
 
         var command = new Register.Command
         {
@@ -66,7 +66,7 @@ public class RegisterTests : IDisposable
 
         var claims = result.Value.Token.ToClaims();
         claims.Should().NotBeNull();
-        claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role);
+        claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role.ToString());
         claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier);
     }
 
@@ -77,7 +77,7 @@ public class RegisterTests : IDisposable
         const string email = "test@example.com";
         const string password = "Password1@";
         const string userName = "testuser";
-        const string role = "Freelancer";
+        const Role role = Role.Freelancer;
 
         var command = new Register.Command
         {

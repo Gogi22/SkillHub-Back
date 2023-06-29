@@ -4,8 +4,13 @@ namespace IdentityServer.Extensions;
 
 public static class DataExtensions
 {
-    public static WebApplication ApplyMigrations<T>(this WebApplication app) where T : DbContext
+    public static WebApplication ApplyMigrations<T>(this WebApplication app, bool inMemory) where T : DbContext
     {
+        if (inMemory)
+        {
+            return app;
+        }
+        
         using var scope = app.Services.CreateScope();
         
         var secondsPassed = 0;

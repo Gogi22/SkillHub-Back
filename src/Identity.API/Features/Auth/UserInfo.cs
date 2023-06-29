@@ -1,8 +1,10 @@
+using Common;
+
 namespace IdentityServer.Features.Auth;
 
 public class UserInfo
 {
-    public UserInfo(string userName, string role, string token)
+    public UserInfo(string userName, Role role, string token)
     {
         UserName = userName;
         Role = role;
@@ -10,6 +12,6 @@ public class UserInfo
     }
 
     public string UserName { get; set; }
-    public string Role { get; set; }
+    public Role Role { get; set; }
     public string Token { get; set; }
 }

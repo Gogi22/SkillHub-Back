@@ -1,3 +1,5 @@
+using Common;
+
 namespace IdentityServer.Entities;
 
 public class UserClaim : BaseEntity<int>
@@ -6,13 +8,13 @@ public class UserClaim : BaseEntity<int>
     {
     }
 
-    public UserClaim(string claimType, string claimValue)
+    public UserClaim(string claimType, Role claimValue)
     {
         ClaimType = claimType ?? throw new ArgumentNullException(nameof(claimType));
-        ClaimValue = claimValue ?? throw new ArgumentNullException(nameof(claimValue));
+        ClaimValue = claimValue;
     }
 
     public string UserId { get; set; } = null!;
     public string ClaimType { get; set; } = null!;
-    public string ClaimValue { get; set; } = null!;
+    public Role ClaimValue { get; set; }
 }
