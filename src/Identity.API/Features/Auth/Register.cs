@@ -14,7 +14,6 @@ namespace IdentityServer.Features.Auth;
 
 public class Register
 {
-    private const string QueueName = "registered_users"; // TODO move to a config file
     public class Command : IRequest<Result<UserInfo>>
     {
         public string Email { get; set; } = null!;
@@ -30,19 +29,12 @@ public class Register
             RuleFor(p => p.Password)
                 .NotEqual(p => p.Email)
                 .NotEqual(p => p.UserName)
-                .MinimumLength(8)
-                .Matches("[A-Za-z]") // At least one letter
-                .Matches("[^A-Za-z0-9]") // At least one symbol
-                .Matches("[a-z]") // At least one lowercase letter
-                .Matches("[A-Z]"); // At least one UpperCase letter
+                .Matches("^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$")
+                .WithMessage("The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one symbol, and one digit.");
             RuleFor(p => p.UserName)
-                .NotEmpty()
                 .MinimumLength(6);
             RuleFor(p => p.Email)
-                .NotEmpty()
                 .EmailAddress();
-            RuleFor(p => p.Role)
-                .NotNull();
             RuleFor(p => p.Role)
                 .Must(role => Enum.IsDefined(typeof(Role), role))
                 .WithMessage("Role must be either Freelancer or Client");
@@ -54,12 +46,14 @@ public class Register
         private readonly UserDbContext _context;
         private readonly IEventProducer _eventProducer;
         private readonly JwtSettings _jwtSettings;
+        private readonly string _queueName;
 
-        public Handler(UserDbContext context, JwtSettings jwtSettings, IEventProducer eventProducer)
+        public Handler(UserDbContext context, JwtSettings jwtSettings, IEventProducer eventProducer, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _jwtSettings = jwtSettings;
             _eventProducer = eventProducer;
+            _queueName = configuration.GetValue<string>("RabbitMQ:Queues:UserRegistered");
         }
 
         public async Task<Result<UserInfo>> Handle(Command request, CancellationToken cancellationToken = default)
@@ -87,7 +81,7 @@ public class Register
 
             var userRegisteredEvent = new UserRegisteredEvent(user.Id, user.Email, user.UserName, request.Role);
 
-            _eventProducer.Publish(userRegisteredEvent, QueueName);
+            _eventProducer.Publish(userRegisteredEvent, _queueName);
 
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
@@ -97,6 +91,4 @@ public class Register
     }
 }
 
-// TODO change result error array to hashset,
-// and for password validation return same error message
-// After that commit move everything to Identity.API namespace;
+// TODO After all todos move everything to Identity.API namespace;

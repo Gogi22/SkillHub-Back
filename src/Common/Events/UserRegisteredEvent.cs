@@ -20,4 +20,4 @@ public class UserRegisteredEvent : IIntegrationEvent
     public Role Role { get; }
 }
 
-// TODO fix wait for rabbit mq when starting SkillHub.API
+// TODO fix wait for rabbit mq when starting SkillHub.API -> after adding docker support

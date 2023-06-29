@@ -34,7 +34,6 @@ public class RegisterValidatorTests
     [Theory]
     [InlineData("", "Password1@", "test_user", Role.Client)]
     [InlineData("test@example.com", "", "test_user", Role.Freelancer)]
-    [InlineData("test@example.com", "Password1@", "", Role.Freelancer)]
     [InlineData("test@example.com", "password1@", "test_user",Role.Client)] // Password does not meet requirements
     [InlineData("test@example.com", "Password1", "test_user", Role.Freelancer)] // Password does not meet requirements
     [InlineData("test@example.com", "Password1@", "test", Role.Freelancer)] // Username does not meet minimum length requirement

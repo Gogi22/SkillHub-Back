@@ -11,23 +11,25 @@ namespace SkillHub.API.Services;
 public class RegisteredUserEventConsumer : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly string _queueName;
     private readonly IModel _channel;
 
-    public RegisteredUserEventConsumer(IServiceProvider serviceProvider, ConnectionFactory connectionFactory)
+    public RegisteredUserEventConsumer(IServiceProvider serviceProvider, ConnectionFactory connectionFactory, string queueName)
     {
         _serviceProvider = serviceProvider;
+        _queueName = queueName;
         _channel = connectionFactory.CreateConnection().CreateModel();
     }
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _channel.QueueDeclare("registered_users", true, false, false);
+        _channel.QueueDeclare(_queueName, true, false, false);
 
         var consumer = new EventingBasicConsumer(_channel);
         
         consumer.Received += OnMessageReceived;
 
-        _channel.BasicConsume(queue: "registered_users",
+        _channel.BasicConsume(queue: _queueName,
             autoAck: false,
             consumer: consumer);
 

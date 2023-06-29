@@ -27,7 +27,7 @@ public class RegisterTests : IDisposable
         var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
         _userDbContext = new UserDbContext(options);
-        _handler = new Register.Handler(_userDbContext, jwtSettings, Mock.Of<IEventProducer>());
+        _handler = new Register.Handler(_userDbContext, jwtSettings, Mock.Of<IEventProducer>(), configuration);
     }
 
     public void Dispose()

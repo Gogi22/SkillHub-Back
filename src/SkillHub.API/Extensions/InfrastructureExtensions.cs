@@ -29,7 +29,8 @@ public static class InfrastructureExtensions
                 Password = configuration["RabbitMQ:Password"],
                 UserName = configuration["RabbitMQ:UserName"],
                 VirtualHost = configuration["RabbitMQ:VirtualHost"] ?? "/"
-            }
+            },
+            configuration["RabbitMQ:Queues:UserRegistered"]
         ));
         
         return services;

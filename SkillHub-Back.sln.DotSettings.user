@@ -6,7 +6,7 @@
 	
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ef29f8a5_002D5ba5_002D427f_002D8a01_002D06e8c8dda1ac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LoginTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ef29f8a5_002D5ba5_002D427f_002D8a01_002D06e8c8dda1ac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LoginTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.LoginTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.RegisterTests.Handle_ValidCredentials_ReturnsSuccessResultWithUserInfo&lt;/TestId&gt;

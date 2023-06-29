@@ -1,5 +1,5 @@
 ﻿namespace Common;
-// TODO error array to hash set because of password validation
+
 public class Result
 {
     protected Result(bool isSuccess, params Error[] error)
