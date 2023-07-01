@@ -72,10 +72,10 @@ public class WriteReview : ICarterModule
         {
             var validations = new List<(Func<bool> Condition, Error Error)>
             {
-                (() => project is null, DomainErrors.Reviews.ProjectNotFound),
-                (() => project!.ProjectStatus != ProjectStatus.Completed, DomainErrors.Reviews.ProjectNotCompleted),
+                (() => project is null, DomainErrors.Review.ProjectNotFound),
+                (() => project!.ProjectStatus != ProjectStatus.Completed, DomainErrors.Review.ProjectNotCompleted),
                 (() => project!.ClientId != request.User.Id, DomainErrors.ClientNotAuthorized),
-                (() => project!.Review != null, DomainErrors.Reviews.ProjectAlreadyReviewed)
+                (() => project!.Review != null, DomainErrors.Review.ProjectAlreadyReviewed)
             };
 
             return validations.FirstOrDefault(validation => validation.Condition()).Error ?? Error.None;
