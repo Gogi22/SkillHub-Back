@@ -1,6 +1,12 @@
 namespace SkillHub.API.Entities;
 
-public class Freelancer
+public interface IAuditableEntity
+{
+    DateTime CreatedAt { get; set; }
+    DateTime ModifiedAt { get; set; }
+}
+
+public class BaseUser : IAuditableEntity
 {
     public string UserId { get; set; } = null!;
 
@@ -8,6 +14,12 @@ public class Freelancer
 
     public string Email { get; set; } = null!;
 
+    public DateTime CreatedAt { get; set; }
+    public DateTime ModifiedAt { get; set; }
+}
+
+public class Freelancer : BaseUser
+{
     public string? Bio { get; set; }
 
     public string? ProfileImageId { get; set; }
@@ -15,46 +27,47 @@ public class Freelancer
     public ICollection<UserSkill> UserSkills { get; set; } = null!;
 
     public ICollection<Review> Reviews { get; set; } = null!;
-    // add a method that adds a review to the user's reviews collection
-
-    public void AddReview(string reviewerId, double rating, string reviewText)
-    {
-        // check if the user has actually worked with the reviewer
-        if (Reviews.Any(r => r.UserId == reviewerId))
-        {
-            throw new Exception("You have already reviewed this user");
-        }
-    }
 }
 
-public class Client
+public class Client : BaseUser
 {
-    public string UserId { get; set; } = null!;
+    public string? FirstName { get; set; }
 
-    public string UserName { get; set; } = null!;
+    public string? LastName { get; set; }
 
-    public string Email { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
+
+    public ICollection<Project> Projects { get; set; } = null!;
+
+    public ICollection<Review> Reviews { get; set; } = null!;
 }
 
 public class Project
 {
-    public Project(string title, string description, ProjectStatus projectStatus, decimal budget, string creatorId)
+    public Project(string title, string description, ProjectStatus projectStatus, decimal budget, string clientId,
+        string? freelancerId)
     {
         Title = title;
         Description = description;
         ProjectStatus = projectStatus;
         Budget = budget;
-        CreatorId = creatorId;
+        ClientId = clientId;
+        FreelancerId = freelancerId;
     }
 
-    public int ProjectId { get; set; }
+    public int Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public decimal Budget { get; set; }
     public ProjectStatus ProjectStatus { get; set; }
-    public string CreatorId { get; set; }
+    public string ClientId { get; set; }
+    public string? FreelancerId { get; set; }
 
-    public Freelancer Creator { get; set; } = null!;
+    public Client Client { get; set; } = null!;
+    public Freelancer Freelancer { get; set; } = null!;
+    public Review? Review { get; set; }
 }
 
 public enum ProjectStatus
@@ -116,27 +129,26 @@ public class UserSkill
     public Skill Skill { get; set; } = null!;
 }
 
-public class Review
+public class Review : IAuditableEntity
 {
-    public Review(int reviewId, string userId, int projectId, double rating, string reviewText, DateTime createdAt,
-        Project project)
+    public Review(int projectId, double rating, string reviewText)
     {
-        ReviewId = reviewId;
-        UserId = userId;
         ProjectId = projectId;
         Rating = rating;
         ReviewText = reviewText;
-        CreatedAt = createdAt;
-        Project = project;
     }
 
-    public int ReviewId { get; set; }
-    public string UserId { get; set; }
+    public int Id { get; set; }
     public int ProjectId { get; set; }
     public double Rating { get; set; }
     public string ReviewText { get; set; }
+    public Project Project { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
+    public DateTime ModifiedAt { get; set; }
 
-    public Freelancer Freelancer { get; set; } = null!;
-    public Project Project { get; set; }
+    public void UpdateReview(double rating, string reviewText)
+    {
+        Rating = rating;
+        ReviewText = reviewText;
+    }
 }

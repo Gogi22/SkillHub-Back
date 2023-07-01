@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
-using SkillHub.API.Infrastructure;
 using SkillHub.API.Services;
 
 namespace SkillHub.API.Extensions;
@@ -9,16 +7,19 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApiDbContext>(options =>
+        services.AddDbContext<ApiDbContext>((serviceProvider, options) =>
         {
             var x = bool.TryParse(configuration["UseInMemoryDatabase"], out var inMemory);
+            var interceptor = serviceProvider.GetRequiredService<AuditableEntitiesInterceptor>();
             if (x && !inMemory)
             {
-                options.UseSqlServer(configuration["SqlServerConnectionString"]!);
+                options.UseSqlServer(configuration["SqlServerConnectionString"]!)
+                    .AddInterceptors(interceptor);
             }
             else
             {
-                options.UseInMemoryDatabase("MyDB");
+                options.UseInMemoryDatabase("MyDB")
+                    .AddInterceptors(interceptor);
             }
         });
 

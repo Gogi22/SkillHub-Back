@@ -1,8 +1,4 @@
-using System.Security.Claims;
-using Carter;
-using Common;
-using MediatR;
-using SkillHub.API.Infrastructure;
+using SkillHub.API.Entities;
 
 namespace SkillHub.API.Features.Reviews.Commands;
 
@@ -11,26 +7,39 @@ public class WriteReview : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("api/review",
-                (IMediator mediator, Command request, ClaimsPrincipal claimsPrincipal) =>
+                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request,
+                    CancellationToken cancellationToken) =>
                 {
-                    var userId = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
-                                 ?? throw new Exception();
-                    request.UserId = userId;
-                    return mediator.Send(request);
+                    request.User = claimsPrincipal.GetUser();
+                    return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(WriteReview))
             .WithTags(nameof(Command))
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .RequireAuthorization();
+            .RequireAuthorization(Policy.Client);
     }
 
     public class Command : IRequest<Result>
     {
-        internal string UserId { get; set; } = null!;
+        internal User User { get; set; } = null!;
         public int ProjectId { get; set; }
         public double Rating { get; set; }
-        public string? ReviewText { get; set; }
+        public string ReviewText { get; set; } = string.Empty;
+    }
+
+    public class Validator : AbstractValidator<Command>
+    {
+        public Validator()
+        {
+            RuleFor(v => v.ProjectId)
+                .NotEmpty();
+            RuleFor(v => v.Rating)
+                .InclusiveBetween(1, 5);
+            RuleFor(v => v.ReviewText)
+                .MinimumLength(10)
+                .MaximumLength(2000);
+        }
     }
 
     public class Handler : IRequestHandler<Command, Result>
@@ -44,9 +53,32 @@ public class WriteReview : ICarterModule
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            // add enw review if user actually worked on the project and hasn't already reviewed it.
-            // var proposal = await _context.Projects
+            var project = await _context.Projects
+                .FirstOrDefaultAsync(p => p.Id == request.ProjectId, cancellationToken);
+
+            var validationResult = ValidateProjectAndUser(request, project);
+            if (validationResult != Error.None)
+            {
+                return validationResult;
+            }
+
+            project!.Review = new Review(project.Id, request.Rating, request.ReviewText);
+            await _context.SaveChangesAsync(cancellationToken);
+
             return Result.Success();
+        }
+
+        private static Error ValidateProjectAndUser(Command request, Project? project)
+        {
+            var validations = new List<(Func<bool> Condition, Error Error)>
+            {
+                (() => project is null, DomainErrors.Reviews.ProjectNotFound),
+                (() => project!.ProjectStatus != ProjectStatus.Completed, DomainErrors.Reviews.ProjectNotCompleted),
+                (() => project!.ClientId != request.User.Id, DomainErrors.ClientNotAuthorized),
+                (() => project!.Review != null, DomainErrors.Reviews.ProjectAlreadyReviewed)
+            };
+
+            return validations.FirstOrDefault(validation => validation.Condition()).Error ?? Error.None;
         }
     }
 }

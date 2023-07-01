@@ -1,8 +1,3 @@
-using Carter;
-using Common;
-using MediatR;
-using SkillHub.API.Infrastructure;
-
 namespace SkillHub.API.Features.Reviews.Queries;
 
 public class GetReviews : ICarterModule

@@ -31,6 +31,11 @@ public class Result
     {
         return Failure(errors);
     }
+    
+    public static implicit operator Result(Error error)
+    {
+        return Failure(error);
+    }
 
     protected static Result<TValue> Success<TValue>(TValue value)
     {

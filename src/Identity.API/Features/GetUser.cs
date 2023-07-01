@@ -11,7 +11,12 @@ public class GetUser
 {
     public class Query : IRequest<Result<Response>>
     {
-        public string UserId { get; set; } = null!;
+        public Query(string userId)
+        {
+            UserId = userId;
+        }
+        
+        public string UserId { get; }
     }
 
     public class Response

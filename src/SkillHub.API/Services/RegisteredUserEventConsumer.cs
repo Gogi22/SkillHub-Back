@@ -1,10 +1,8 @@
 using System.Text;
-using Common;
 using Common.Events;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using SkillHub.API.Infrastructure;
 
 namespace SkillHub.API.Services;
 

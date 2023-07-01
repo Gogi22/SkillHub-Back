@@ -1,7 +1,3 @@
-using System.Security.Claims;
-using Common;
-using SkillHub.API.Common;
-
 namespace SkillHub.API.Extensions;
 
 public static class AuthorizationExtensions

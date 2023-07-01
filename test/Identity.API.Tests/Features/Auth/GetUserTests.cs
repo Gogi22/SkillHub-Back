@@ -45,7 +45,7 @@ public class GetUserTests : IDisposable
         _userDbContext.Users.Add(user);
         await _userDbContext.SaveChangesAsync();
 
-        var query = new GetUser.Query { UserId = user.Id };
+        var query = new GetUser.Query(user.Id);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -66,7 +66,7 @@ public class GetUserTests : IDisposable
         // Arrange
         var userId = Guid.NewGuid().ToString();
 
-        var query = new GetUser.Query { UserId = userId };
+        var query = new GetUser.Query(userId);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);

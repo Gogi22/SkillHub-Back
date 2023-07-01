@@ -1,7 +1,3 @@
-using Carter;
-using FluentValidation;
-using MediatR;
-
 namespace SkillHub.API;
 
 public class GetString : ICarterModule

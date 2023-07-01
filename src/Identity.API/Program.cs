@@ -53,9 +53,9 @@ app.MapPost("/auth/login",
         (await mediator.Send(model, cancellationToken)).ToActionResult());
 
 
-app.MapGet("/user",
+app.MapGet("/user/{userId:guid}",
     [ServiceFilter(typeof(ValidateInternalServiceMiddleware))]
-    async ([FromServices] IMediator mediator, [FromBody] GetUser.Query query, CancellationToken cancellationToken) =>
-        (await mediator.Send(query, cancellationToken)).ToActionResult()).ExcludeFromDescription();
+    async ([FromServices] IMediator mediator, [FromRoute] Guid userId, CancellationToken cancellationToken) =>
+        (await mediator.Send(new GetUser.Query(userId.ToString()), cancellationToken)).ToActionResult()).ExcludeFromDescription();
 
 await app.RunAsync();

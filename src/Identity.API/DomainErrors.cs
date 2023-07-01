@@ -1,4 +1,6 @@
-namespace Common;
+using Common;
+
+namespace Identity.API;
 
 public static class DomainErrors
 {
