@@ -9,12 +9,12 @@ public static class DomainErrors
 
     public static readonly Error ClientNotAuthorized =
         new("ClientNotAuthorized", "Client is not authorized to perform this action.");
+    
+    public static readonly Error ProjectNotFound =
+        new("ProjectNotFound", "Project with the provided Id does not exist.");
 
     public static class Review
     {
-        public static readonly Error ProjectNotFound =
-            new("Review.ProjectNotFound", "Project with the provided Id does not exist.");
-
         public static readonly Error ProjectNotCompleted =
             new("Review.ProjectNotCompleted", "Can not write a review for uncompleted Project.");
 
@@ -23,5 +23,11 @@ public static class DomainErrors
 
         public static readonly Error ReviewNotFound =
             new("Review.ReviewNotFound", "Review with the provided Id does not exist.");
+    }
+    
+    public static class Skill
+    {
+        public static readonly Error SkillNotFound =
+            new("Skill.SkillNotFound", "Skill with the provided Id does not exist.");
     }
 }

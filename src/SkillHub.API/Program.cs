@@ -2,6 +2,7 @@ using Common.Extensions;
 using Common.Middleware;
 using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
+using SkillHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddCarter();
 builder.Services.AddMediatR(config => { config.RegisterServicesFromAssembly(typeof(Program).Assembly); });
 builder.Services.AddFluentValidation(new[] { typeof(Program).Assembly });
+
+builder.Services.AddScoped<ISkillsService, SkillsService>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorizationPolicies();

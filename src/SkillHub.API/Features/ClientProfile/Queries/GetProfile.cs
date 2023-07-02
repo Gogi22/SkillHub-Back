@@ -1,3 +1,5 @@
+using AutoMapper;
+
 namespace SkillHub.API.Features.ClientProfile.Queries;
 
 public class GetProfile : ICarterModule
@@ -28,41 +30,34 @@ public class GetProfile : ICarterModule
     
     public class Profile
     {
-        public Profile(string firstName, string lastName, string websiteUrl, string companyName, string clientInfo)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            WebsiteUrl = websiteUrl;
-            CompanyName = companyName;
-            ClientInfo = clientInfo;
-        }
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string WebsiteUrl { get; set; }
-        public string CompanyName { get; set; }
-        public string ClientInfo { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string WebsiteUrl { get; set; } = null!;
+        public string CompanyName { get; set; } = null!;
+        public string ClientInfo { get; set; } = null!;
     }
     
     public class Handler : IRequestHandler<Command, Result<Profile>>
     {
         private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
 
-        public Handler(ApiDbContext context)
+        public Handler(ApiDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Result<Profile>> Handle(Command request, CancellationToken cancellationToken)
         {
             var client = await _context.Clients
+                .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.UserId == request.ClientId, cancellationToken);
 
             if (client is null)
                 return DomainErrors.ClientNotFound;
 
-            return new Profile(client.FirstName, client.LastName, client.WebsiteUrl, client.CompanyName,
-                client.ClientInfo);
+            return _mapper.Map<Profile>(client);
         }
     }
 }

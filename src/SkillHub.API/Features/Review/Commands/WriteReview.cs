@@ -68,11 +68,11 @@ public class WriteReview : ICarterModule
             return Result.Success();
         }
 
-        private static Error ValidateProjectAndUser(Command request, Project? project)
+        private static Error ValidateProjectAndUser(Command request, Entities.Project? project)
         {
             var validations = new List<(Func<bool> Condition, Error Error)>
             {
-                (() => project is null, DomainErrors.Review.ProjectNotFound),
+                (() => project is null, DomainErrors.ProjectNotFound),
                 (() => project!.ProjectStatus != ProjectStatus.Completed, DomainErrors.Review.ProjectNotCompleted),
                 (() => project!.ClientId != request.User.Id, DomainErrors.ClientNotAuthorized),
                 (() => project!.Review != null, DomainErrors.Review.ProjectAlreadyReviewed)

@@ -1,3 +1,5 @@
+using AutoMapper;
+
 namespace SkillHub.API.Features.FreelancerProfile.Queries;
 
 public class GetProfile : ICarterModule
@@ -28,44 +30,37 @@ public class GetProfile : ICarterModule
     
     public class Profile
     {
-        public Profile(string firstName, string lastName, string bio, string title, string profilePhotoUrl, List<string> skills)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Bio = bio;
-            Title = title;
-            ProfilePhotoUrl = profilePhotoUrl;
-            Skills = skills;
-        }
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Bio { get; set; }
-        public string Title { get; set; }
-        public string ProfilePhotoUrl { get; set; }
-        public List<string> Skills { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string Bio { get; set; } = null!;
+        public string Title { get; set; } = null!;
+        public string ProfilePhotoUrl { get; set; } = null!;
+        public List<string> Skills { get; set; } = null!;
     }
     
     public class Handler : IRequestHandler<Command, Result<Profile>>
     {
         private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
 
-        public Handler(ApiDbContext context)
+        public Handler(ApiDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Result<Profile>> Handle(Command request, CancellationToken cancellationToken)
         {
             var freelancer = await _context.Freelancers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.UserId == request.FreelancerId, cancellationToken);
 
             if (freelancer is null)
                 return DomainErrors.FreelancerNotFound;
             
-            var url = "http://localhost:7007/profile-photos/" + freelancer.ProfilePhotoId; // TODO move this to configuration and different service class
-            return new Profile(freelancer.FirstName, freelancer.LastName, freelancer.Bio, freelancer.Title, 
-                url, freelancer.Skills.Select(s => s.Name).ToList());
+            freelancer.ProfilePhotoId = "http://localhost:7007/profile-photos/" + freelancer.ProfilePhotoId; 
+            // TODO move this to configuration and different service class
+            return _mapper.Map<Profile>(freelancer);
         }
     }
 }

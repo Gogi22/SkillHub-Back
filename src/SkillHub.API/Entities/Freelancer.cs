@@ -33,14 +33,9 @@ public class Freelancer : BaseUser
     public ICollection<Skill> Skills { get; set; } = new List<Skill>();
     public ICollection<Project> Projects { get; } = new List<Project>();
 
-    public void UpdateProfile(string firstName, string lastName, string bio, string profilePhotoId, string title, IEnumerable<int> skillIds, List<Skill> skills)
+    public void UpdateProfile(string firstName, string lastName, string bio, string profilePhotoId, string title, List<Skill> skills)
     {
-        Skills.Clear();
-        foreach(var skillId in skillIds)
-        {
-            var skill = skills.FirstOrDefault(s => s.SkillId == skillId);
-            if (skill != null) Skills.Add(skill);
-        }
+        Skills = skills;
         FirstName = firstName;
         LastName = lastName;
         Title = title;
@@ -65,6 +60,15 @@ public class Client : BaseUser
         CompanyName = companyName;
         ClientInfo = clientInfo;
     }
+    
+    public void AddProject(string title, string description, decimal budget, ExperienceLevel experienceLevel, ICollection<Skill> skills)
+    {
+        var project = new Project(title, description, budget, UserId, skills)
+        {
+            ExperienceLevel = experienceLevel
+        };
+        Projects.Add(project);
+    }
 
     public ICollection<Project> Projects { get; set; } = null!;
 
@@ -73,15 +77,13 @@ public class Client : BaseUser
 
 public class Project
 {
-    public Project(string title, string description, ProjectStatus projectStatus, decimal budget, string clientId,
-        string? freelancerId)
+    public Project(string title, string description, decimal budget, string clientId, ICollection<Skill> skills)
     {
         Title = title;
         Description = description;
-        ProjectStatus = projectStatus;
         Budget = budget;
         ClientId = clientId;
-        FreelancerId = freelancerId;
+        Skills = skills;
     }
 
     public int Id { get; set; }
@@ -89,12 +91,14 @@ public class Project
     public string Description { get; set; }
     public decimal Budget { get; set; }
     public ProjectStatus ProjectStatus { get; set; }
+    public ExperienceLevel ExperienceLevel { get; set; }
     public string ClientId { get; set; }
     public string? FreelancerId { get; set; }
 
     public Client Client { get; set; } = null!;
     public Freelancer Freelancer { get; set; } = null!;
     public Review? Review { get; set; }
+    public ICollection<Skill> Skills { get; set; }
 }
 
 public enum ProjectStatus
@@ -103,6 +107,13 @@ public enum ProjectStatus
     InProgress,
     Completed,
     Aborted
+}
+
+public enum ExperienceLevel
+{
+    Entry,
+    Intermediate,
+    Expert
 }
 
 public class Proposal
@@ -148,6 +159,18 @@ public class Skill
 public class FreelancerSkill
 {
     public FreelancerSkill(int freelancerId, int skillId)
+    {
+        FreelancerId = freelancerId;
+        SkillId = skillId;
+    }
+
+    public int FreelancerId { get; set; }
+    public int SkillId { get; set; }
+}
+
+public class ProjectSkill
+{
+    public ProjectSkill(int freelancerId, int skillId)
     {
         FreelancerId = freelancerId;
         SkillId = skillId;

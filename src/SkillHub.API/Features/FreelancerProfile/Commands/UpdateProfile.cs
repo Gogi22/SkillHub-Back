@@ -1,3 +1,4 @@
+using SkillHub.API.Entities;
 using SkillHub.API.Services;
 
 namespace SkillHub.API.Features.FreelancerProfile.Commands;
@@ -54,11 +55,13 @@ public class UpdateProfile : ICarterModule
     {
         private readonly ApiDbContext _context;
         private readonly IUserService _userService;
+        private readonly ISkillsService _skillsService;
 
-        public Handler(ApiDbContext context, IUserService userService)
+        public Handler(ApiDbContext context, IUserService userService, ISkillsService skillsService) // TODO remove userService
         {
             _context = context;
             _userService = userService;
+            _skillsService = skillsService;
         }
         
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
@@ -68,8 +71,11 @@ public class UpdateProfile : ICarterModule
             if (freelancer is null)
                 return DomainErrors.FreelancerNotFound;
 
-            var skills = await _context.Skills.ToListAsync(cancellationToken);
-            freelancer.UpdateProfile(request.FirstName, request.LastName, request.Bio, request.ProfilePhotoId, request.Title, request.SkillIds, skills);
+            var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
+            if (!skillsResult.IsSuccess)
+                return skillsResult;
+            
+            freelancer.UpdateProfile(request.FirstName, request.LastName, request.Bio, request.ProfilePhotoId, request.Title, skillsResult.Value!);
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }

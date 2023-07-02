@@ -40,7 +40,7 @@ public class GetSkills : ICarterModule
 
         public async Task<Result<List<Skill>>> Handle(Command request, CancellationToken cancellationToken)
         {
-            return await _context.Skills.Select(x => new Skill(x.SkillId, x.Name)).ToListAsync(cancellationToken);
+            return await _context.Skills.AsNoTracking().Select(x => new Skill(x.SkillId, x.Name)).ToListAsync(cancellationToken);
         }
     }
 }
