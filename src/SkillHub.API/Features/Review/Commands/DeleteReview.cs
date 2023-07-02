@@ -1,4 +1,4 @@
-namespace SkillHub.API.Features.Reviews.Commands;
+namespace SkillHub.API.Features.Review.Commands;
 
 public class DeleteReview : ICarterModule
 {

@@ -1,6 +1,6 @@
 using SkillHub.API.Entities;
 
-namespace SkillHub.API.Features.Reviews.Commands;
+namespace SkillHub.API.Features.Review.Commands;
 
 public class WriteReview : ICarterModule
 {
@@ -62,7 +62,7 @@ public class WriteReview : ICarterModule
                 return validationResult;
             }
 
-            project!.Review = new Review(project.Id, request.Rating, request.ReviewText);
+            project!.Review = new Entities.Review(project.Id, request.Rating, request.ReviewText);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

@@ -16,7 +16,7 @@ public class UserService : IUserService
         _identityApiUrl = configuration["IdentityApiUrl"];
     }
 
-    public async Task<Client?> GetClient(string userId, CancellationToken cancellationToken = default)
+    public async Task<Client?> GetClientAsync(string userId, CancellationToken cancellationToken = default)
     {
         var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
         if (client is not null)
@@ -27,7 +27,7 @@ public class UserService : IUserService
         return await GetUserFromIdentity(userId, cancellationToken) as Client;
     }
 
-    public async Task<Freelancer?> GetFreelancer(string userId, CancellationToken cancellationToken = default)
+    public async Task<Freelancer?> GetFreelancerAsync(string userId, CancellationToken cancellationToken = default)
     {
         var freelancer = await _dbContext.Freelancers.FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
         if (freelancer is not null)

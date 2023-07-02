@@ -1,14 +1,15 @@
-namespace SkillHub.API.Features.Reviews.Commands;
+namespace SkillHub.API.Features.Review.Commands;
 
 public class UpdateReview : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("api/review",
-                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request,
+        app.MapPut("api/review/{reviewId:int}",
+                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request, int reviewId,
                     CancellationToken cancellationToken) =>
                 {
                     request.User = claimsPrincipal.GetUser();
+                    request.ReviewId = reviewId;// when testing, try to remove reviewId from the parameter list and see what happens
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateReview))
@@ -17,12 +18,11 @@ public class UpdateReview : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
     }
-
     public class Command : IRequest<Result>
     {
         internal User User { get; set; } = null!;
-        public int ReviewId { get; set; }
         public double Rating { get; set; }
+        internal int ReviewId { get; set; } 
         public string ReviewText { get; set; } = string.Empty;
     }
 

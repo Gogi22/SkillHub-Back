@@ -13,6 +13,8 @@ public class ApiDbContext : DbContext
 
     public DbSet<Project> Projects { get; set; } = null!;
 
+    public DbSet<Skill> Skills { get; set; } = null!;
+    
 //     public DbSet<Proposal> Proposals { get; set; } = null!;
     public DbSet<Review> Reviews { get; set; } = null!;
 }

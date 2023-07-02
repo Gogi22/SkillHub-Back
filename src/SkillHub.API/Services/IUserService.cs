@@ -4,6 +4,6 @@ namespace SkillHub.API.Services;
 
 public interface IUserService
 {
-    public Task<Client?> GetClient(string userId, CancellationToken cancellationToken = default);
-    public Task<Freelancer?> GetFreelancer(string userId, CancellationToken cancellationToken = default);
+    public Task<Client?> GetClientAsync(string userId, CancellationToken cancellationToken = default);
+    public Task<Freelancer?> GetFreelancerAsync(string userId, CancellationToken cancellationToken = default);
 }
