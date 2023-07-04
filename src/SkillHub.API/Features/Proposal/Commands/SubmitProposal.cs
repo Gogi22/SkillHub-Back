@@ -26,7 +26,7 @@ public class SubmitProposal : ICarterModule
         public int ProjectId { get; set; }
         public string CoverLetter { get; set; } = null!;
     }
-    
+
     public class Validator : AbstractValidator<Command>
     {
         public Validator()

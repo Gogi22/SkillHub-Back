@@ -61,19 +61,20 @@ public class CreateProject : ICarterModule
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-           var client = await _context.Clients
+            var client = await _context.Clients
                 .FirstOrDefaultAsync(c => c.UserId == request.User.Id, cancellationToken);
 
-           if (client is null)
-               return DomainErrors.ClientNotFound;
-           
-           var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
-           if (!skillsResult.IsSuccess)
-               return skillsResult;
-           
-           client.AddProject(request.Title, request.Description, request.Budget, request.ExperienceLevel, skillsResult.Value!);
-           await _context.SaveChangesAsync(cancellationToken);
-           return Result.Success();
+            if (client is null)
+                return DomainErrors.ClientNotFound;
+
+            var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
+            if (!skillsResult.IsSuccess)
+                return skillsResult;
+
+            client.AddProject(request.Title, request.Description, request.Budget, request.ExperienceLevel,
+                skillsResult.Value!);
+            await _context.SaveChangesAsync(cancellationToken);
+            return Result.Success();
         }
     }
 }

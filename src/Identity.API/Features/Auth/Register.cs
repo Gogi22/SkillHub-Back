@@ -68,7 +68,7 @@ public class Register
             var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(request.Password);
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Role, request.Role.ToString()),
+                new(ClaimTypes.Role, request.Role.ToString())
             };
 
             var user = new User(request.UserName, request.Email, passwordHash, passwordSalt,
@@ -78,7 +78,7 @@ public class Register
             await _context.SaveChangesAsync(cancellationToken);
 
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-            claims.Add(new Claim(ClaimTypes.Email, request.Email)); 
+            claims.Add(new Claim(ClaimTypes.Email, request.Email));
             claims.Add(new Claim(ClaimTypes.Name, request.UserName));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 

@@ -19,7 +19,7 @@ public class RejectProposal : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
     }
-    
+
     public class Command : IRequest<Result>
     {
         internal User User { get; set; } = null!;
@@ -34,7 +34,7 @@ public class RejectProposal : ICarterModule
         {
             _context = context;
         }
-        
+
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var proposal = await _context.Proposals

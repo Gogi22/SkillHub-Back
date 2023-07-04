@@ -20,14 +20,14 @@ public class GetProfile : ICarterModule
 
     public class Command : IRequest<Result<ProfileDto>>
     {
-        public string ClientId { get; }
-
         public Command(string clientId)
         {
             ClientId = clientId;
         }
+
+        public string ClientId { get; }
     }
-    
+
     public class ProfileDto
     {
         public string FirstName { get; set; } = null!;
@@ -36,7 +36,7 @@ public class GetProfile : ICarterModule
         public string CompanyName { get; set; } = null!;
         public string ClientInfo { get; set; } = null!;
     }
-    
+
     public class Handler : IRequestHandler<Command, Result<ProfileDto>>
     {
         private readonly ApiDbContext _context;
@@ -61,4 +61,3 @@ public class GetProfile : ICarterModule
         }
     }
 }
-

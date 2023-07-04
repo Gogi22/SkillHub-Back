@@ -8,7 +8,8 @@ public class UpdateProfile : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPut("api/freelancer/profile/",
-                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request, CancellationToken cancellationToken) =>
+                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request,
+                    CancellationToken cancellationToken) =>
                 {
                     request.Claims = claimsPrincipal.Claims;
                     return mediator.Send(request, cancellationToken);
@@ -50,7 +51,7 @@ public class UpdateProfile : ICarterModule
                 .NotEmpty();
         }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly ApiDbContext _context;
@@ -61,7 +62,7 @@ public class UpdateProfile : ICarterModule
             _context = context;
             _skillsService = skillsService;
         }
-        
+
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
         {
             var user = request.Claims.GetUserInfo();
@@ -72,8 +73,9 @@ public class UpdateProfile : ICarterModule
             var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
             if (!skillsResult.IsSuccess)
                 return skillsResult;
-            
-            freelancer.UpdateProfile(request.FirstName, request.LastName, request.Bio, request.ProfilePhotoId, request.Title, skillsResult.Value!);
+
+            freelancer.UpdateProfile(request.FirstName, request.LastName, request.Bio, request.ProfilePhotoId,
+                request.Title, skillsResult.Value!);
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }

@@ -1,6 +1,3 @@
-using RabbitMQ.Client;
-using SkillHub.API.Services;
-
 namespace SkillHub.API.Extensions;
 
 public static class InfrastructureExtensions

@@ -28,7 +28,7 @@ public class GetProjects
             _context = context;
             _mapper = mapper;
         }
-        
+
         public async Task<Result<List<ProjectDto>>> Handle(Command request, CancellationToken cancellationToken)
         {
             var projects = await _context.Projects
@@ -36,7 +36,7 @@ public class GetProjects
                 .Include(p => p.Skills)
                 .Include(p => p.Review)
                 .ToListAsync(cancellationToken);
-            
+
             return _mapper.Map<List<ProjectDto>>(projects);
         }
     }

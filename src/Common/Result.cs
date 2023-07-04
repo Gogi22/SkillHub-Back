@@ -31,7 +31,7 @@ public class Result
     {
         return Failure(errors);
     }
-    
+
     public static implicit operator Result(Error error)
     {
         return Failure(error);

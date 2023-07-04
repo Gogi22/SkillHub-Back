@@ -27,7 +27,7 @@ public class UpdateProposal : ICarterModule
         internal int ProposalId { get; set; }
         public string CoverLetter { get; set; } = null!;
     }
-    
+
     public class Validator : AbstractValidator<Command>
     {
         public Validator()
@@ -47,13 +47,13 @@ public class UpdateProposal : ICarterModule
         }
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
-        { 
+        {
             var proposal = await _context.Proposals
-                    .FirstOrDefaultAsync(x => x.ProposalId == request.ProposalId, cancellationToken);
-            
+                .FirstOrDefaultAsync(x => x.ProposalId == request.ProposalId, cancellationToken);
+
             if (proposal is null)
                 return DomainErrors.Proposal.ProposalNotFound;
-            
+
             if (proposal.FreelancerId != request.User.Id)
                 return DomainErrors.FreelancerNotAuthorized;
 

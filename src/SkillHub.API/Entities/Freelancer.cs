@@ -20,9 +20,9 @@ public class BaseUser : IAuditableEntity
     public string UserName { get; set; }
 
     public string Email { get; set; }
-    
+
     public string FirstName { get; set; } = null!;
-    
+
     public string LastName { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
@@ -31,16 +31,21 @@ public class BaseUser : IAuditableEntity
 
 public class Freelancer : BaseUser
 {
+    public Freelancer(string userId, string userName, string email) : base(userId, userName, email)
+    {
+    }
+
     public string Bio { get; set; } = null!;
 
     public string Title { get; set; } = null!;
-    
+
     public string ProfilePhotoId { get; set; } = null!;
 
     public ICollection<Skill> Skills { get; set; } = new List<Skill>();
     public ICollection<Project> Projects { get; } = new List<Project>();
 
-    public void UpdateProfile(string firstName, string lastName, string bio, string profilePhotoId, string title, List<Skill> skills)
+    public void UpdateProfile(string firstName, string lastName, string bio, string profilePhotoId, string title,
+        List<Skill> skills)
     {
         Skills = skills;
         FirstName = firstName;
@@ -49,21 +54,27 @@ public class Freelancer : BaseUser
         Bio = bio;
         ProfilePhotoId = profilePhotoId;
     }
-
-    public Freelancer(string userId, string userName, string email) : base(userId, userName, email)
-    {
-    }
 }
+
 // TODO add work experience table, maybe education also
 public class Client : BaseUser
 {
+    public Client(string userId, string userName, string email) : base(userId, userName, email)
+    {
+    }
+
     public string WebsiteUrl { get; set; } = null!;
-    
+
     public string CompanyName { get; set; } = null!;
-    
+
     public string ClientInfo { get; set; } = string.Empty;
-    
-    public void UpdateProfile(string firstName, string lastName, string websiteUrl, string companyName, string clientInfo)
+
+    public ICollection<Project> Projects { get; set; } = null!;
+
+    public ICollection<Review> Reviews { get; set; } = null!;
+
+    public void UpdateProfile(string firstName, string lastName, string websiteUrl, string companyName,
+        string clientInfo)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -71,22 +82,15 @@ public class Client : BaseUser
         CompanyName = companyName;
         ClientInfo = clientInfo;
     }
-    
-    public void AddProject(string title, string description, decimal budget, ExperienceLevel experienceLevel, ICollection<Skill> skills)
+
+    public void AddProject(string title, string description, decimal budget, ExperienceLevel experienceLevel,
+        ICollection<Skill> skills)
     {
         var project = new Project(title, description, budget, UserId, skills)
         {
             ExperienceLevel = experienceLevel
         };
         Projects.Add(project);
-    }
-
-    public ICollection<Project> Projects { get; set; } = null!;
-
-    public ICollection<Review> Reviews { get; set; } = null!;
-
-    public Client(string userId, string userName, string email) : base(userId, userName, email)
-    {
     }
 }
 
@@ -115,7 +119,7 @@ public class Project
     public Review? Review { get; set; }
     public ICollection<Proposal> Proposals { get; } = new List<Proposal>();
     public ICollection<Skill> Skills { get; set; }
-    
+
     public void AddProposal(string freelancerId, string coverLetter)
     {
         var proposal = new Proposal(freelancerId, Id, coverLetter);
@@ -173,6 +177,7 @@ public class Skill
         {
             throw new ArgumentException("Skill name cannot be null or empty", nameof(name));
         }
+
         SkillId = skillId;
         Name = name;
     }

@@ -20,14 +20,14 @@ public class GetProfile : ICarterModule
 
     public class Command : IRequest<Result<Profile>>
     {
-        public string FreelancerId { get; }
-
         public Command(string freelancerId)
         {
             FreelancerId = freelancerId;
         }
+
+        public string FreelancerId { get; }
     }
-    
+
     public class Profile
     {
         public string FirstName { get; set; } = null!;
@@ -37,7 +37,7 @@ public class GetProfile : ICarterModule
         public string ProfilePhotoUrl { get; set; } = null!;
         public List<string> Skills { get; set; } = null!;
     }
-    
+
     public class Handler : IRequestHandler<Command, Result<Profile>>
     {
         private readonly ApiDbContext _context;
@@ -57,11 +57,10 @@ public class GetProfile : ICarterModule
 
             if (freelancer is null)
                 return DomainErrors.FreelancerNotFound;
-            
-            freelancer.ProfilePhotoId = "http://localhost:7007/profile-photos/" + freelancer.ProfilePhotoId; 
+
+            freelancer.ProfilePhotoId = "http://localhost:7007/profile-photos/" + freelancer.ProfilePhotoId;
             // TODO move this to configuration and different service class
             return _mapper.Map<Profile>(freelancer);
         }
     }
 }
-

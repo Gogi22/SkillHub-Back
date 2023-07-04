@@ -20,8 +20,9 @@ public class DtoProfile : Profile
             .ConstructUsing(proposal => ProposalEntityToDto(proposal));
     }
 
-    private static GetProposal.ProposalDto ProposalEntityToDto(Proposal proposal) =>
-        new()
+    private static GetProposal.ProposalDto ProposalEntityToDto(Proposal proposal)
+    {
+        return new GetProposal.ProposalDto
         {
             FreelancerId = proposal.FreelancerId,
             ProjectId = proposal.ProjectId,
@@ -29,6 +30,7 @@ public class DtoProfile : Profile
             Status = proposal.Status,
             CreatedAt = proposal.CreatedAt
         };
+    }
 
     private static GetProfile.Profile FreelancerEntityToProfileDto(Freelancer freelancer)
     {
@@ -57,7 +59,7 @@ public class DtoProfile : Profile
 
     private static ProjectDto ProjectEntityToDto(Project project)
     {
-        return new()
+        return new ProjectDto
         {
             Budget = project.Budget,
             ClientId = project.ClientId,

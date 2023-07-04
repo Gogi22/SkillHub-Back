@@ -48,15 +48,16 @@ public class GetReviews : ICarterModule
         public async Task<Result<List<Review>>> Handle(Command request, CancellationToken cancellationToken)
         {
             var freelancer =
-                await _context.Freelancers.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == request.UserId, cancellationToken);
+                await _context.Freelancers.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.UserId == request.UserId, cancellationToken);
             if (freelancer == null)
                 return DomainErrors.FreelancerNotFound;
 
             var reviews = freelancer.Projects
                 .Where(p => p.Review is not null)
                 .Select(p => p.Review)
-                    .Select(r => new Review(r!.Id, r.ProjectId, r.Rating, r.ReviewText, r.CreatedAt))
-                    .ToList();
+                .Select(r => new Review(r!.Id, r.ProjectId, r.Rating, r.ReviewText, r.CreatedAt))
+                .ToList();
 
             return reviews;
         }

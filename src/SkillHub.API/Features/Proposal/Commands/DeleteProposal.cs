@@ -8,7 +8,7 @@ public class DeleteProposal : ICarterModule
     {
         app.MapDelete("api/proposal/{proposalId:int}",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
-                    CancellationToken cancellationToken) => 
+                        CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(AcceptProposal))
             .WithTags(nameof(Command))
@@ -16,7 +16,7 @@ public class DeleteProposal : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Freelancer);
     }
-    
+
     public class Command : IRequest<Result>
     {
         public Command(User user, int proposalId)
@@ -28,7 +28,7 @@ public class DeleteProposal : ICarterModule
         internal User User { get; set; }
         public int ProposalId { get; set; }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly ApiDbContext _context;
@@ -42,7 +42,7 @@ public class DeleteProposal : ICarterModule
         {
             var proposal = await _context.Proposals
                 .FirstOrDefaultAsync(x => x.ProposalId == request.ProposalId, cancellationToken);
-            
+
             if (proposal is null)
                 return DomainErrors.Proposal.ProposalNotFound;
 
@@ -51,10 +51,10 @@ public class DeleteProposal : ICarterModule
 
             if (proposal.Status != ProposalStatus.Pending)
                 return DomainErrors.Proposal.ProposalIsNotActive;
-            
+
             _context.Proposals.Remove(proposal);
             await _context.SaveChangesAsync(cancellationToken);
-            
+
             return Result.Success();
         }
     }

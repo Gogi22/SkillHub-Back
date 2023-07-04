@@ -17,12 +17,12 @@ public class GetProject
 
     public class Command : IRequest<Result<ProjectDto>>
     {
-        public int ProjectId { get; }
-
         public Command(int projectId)
         {
             ProjectId = projectId;
         }
+
+        public int ProjectId { get; }
     }
 
     public class Handler : IRequestHandler<Command, Result<ProjectDto>>
@@ -35,7 +35,7 @@ public class GetProject
             _context = context;
             _mapper = mapper;
         }
-        
+
         public async Task<Result<ProjectDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects

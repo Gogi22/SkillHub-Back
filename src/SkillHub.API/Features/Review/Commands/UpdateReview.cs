@@ -9,7 +9,8 @@ public class UpdateReview : ICarterModule
                     CancellationToken cancellationToken) =>
                 {
                     request.User = claimsPrincipal.GetUser();
-                    request.ReviewId = reviewId;// when testing, try to remove reviewId from the parameter list and see what happens
+                    request.ReviewId =
+                        reviewId; // when testing, try to remove reviewId from the parameter list and see what happens
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateReview))
@@ -18,11 +19,12 @@ public class UpdateReview : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
     }
+
     public class Command : IRequest<Result>
     {
         internal User User { get; set; } = null!;
         public double Rating { get; set; }
-        internal int ReviewId { get; set; } 
+        internal int ReviewId { get; set; }
         public string ReviewText { get; set; } = string.Empty;
     }
 

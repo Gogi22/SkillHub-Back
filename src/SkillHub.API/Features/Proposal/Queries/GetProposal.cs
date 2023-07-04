@@ -9,7 +9,7 @@ public class GetProposal : ICarterModule
     {
         app.MapGet("api/proposal/{ProposalId:int}",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
-                    CancellationToken cancellationToken) => 
+                        CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(GetProposal))
             .WithTags(nameof(Command))
@@ -17,7 +17,7 @@ public class GetProposal : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
     }
-    
+
     public class Command : IRequest<Result<ProposalDto>>
     {
         public Command(User user, int proposalId)
@@ -38,7 +38,7 @@ public class GetProposal : ICarterModule
         public ProposalStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result<ProposalDto>>
     {
         private readonly ApiDbContext _context;
@@ -49,7 +49,7 @@ public class GetProposal : ICarterModule
             _context = context;
             _mapper = mapper;
         }
-        
+
         public async Task<Result<ProposalDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var proposal = await _context.Proposals
