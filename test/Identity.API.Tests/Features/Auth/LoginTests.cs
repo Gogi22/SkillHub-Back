@@ -76,6 +76,8 @@ public class LoginTests : IDisposable
         claims.Should().NotBeNull();
 
         claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role.ToString());
+        claims.Should().Contain(c => c.Type == ClaimTypes.Email && c.Value == email);
+        claims.Should().Contain(c => c.Type == ClaimTypes.Name && c.Value == userName);
         claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == userId);
     }
 
@@ -118,6 +120,8 @@ public class LoginTests : IDisposable
         var claims = result.Value?.Token.ToClaims();
         claims.Should().NotBeNull();
 
+        claims.Should().Contain(c => c.Type == ClaimTypes.Email && c.Value == email);
+        claims.Should().Contain(c => c.Type == ClaimTypes.Name && c.Value == userName);
         claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role.ToString());
         claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == userId);
     }

@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Common;
-using Common.Events;
 using Common.Options;
 using FluentValidation;
 using Identity.API.Entities;
@@ -45,16 +44,13 @@ public class Register
     public class Handler : IRequestHandler<Command, Result<UserInfo>>
     {
         private readonly UserDbContext _context;
-        private readonly IEventProducer _eventProducer;
         private readonly JwtSettings _jwtSettings;
         private readonly string _queueName;
 
-        public Handler(UserDbContext context, JwtSettings jwtSettings, IEventProducer eventProducer,
-            IConfiguration configuration)
+        public Handler(UserDbContext context, JwtSettings jwtSettings, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _jwtSettings = jwtSettings;
-            _eventProducer = eventProducer;
             _queueName = configuration.GetValue<string>("RabbitMQ:Queues:UserRegistered");
         }
 
@@ -72,7 +68,7 @@ public class Register
             var (passwordHash, passwordSalt) = PasswordManager.CreatePasswordHash(request.Password);
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Role, request.Role.ToString())
+                new(ClaimTypes.Role, request.Role.ToString()),
             };
 
             var user = new User(request.UserName, request.Email, passwordHash, passwordSalt,
@@ -81,11 +77,9 @@ public class Register
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var userRegisteredEvent = new UserRegisteredEvent(user.Id, user.Email, user.UserName, request.Role);
-
-            _eventProducer.Publish(userRegisteredEvent, _queueName);
-
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            claims.Add(new Claim(ClaimTypes.Email, request.Email)); 
+            claims.Add(new Claim(ClaimTypes.Name, request.UserName));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 
             return new UserInfo(user.UserName, claims.GetRole(), token);

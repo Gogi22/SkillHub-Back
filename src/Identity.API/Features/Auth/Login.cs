@@ -51,6 +51,8 @@ public class Login
 
             var claims = user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue.ToString())).ToList();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            claims.Add(new Claim(ClaimTypes.Email, user.Email)); 
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             var token = PasswordManager.GenerateToken(user.UserName, claims, _jwtSettings);
 
             return new UserInfo(user.UserName, user.Claims.GetRole(), token);

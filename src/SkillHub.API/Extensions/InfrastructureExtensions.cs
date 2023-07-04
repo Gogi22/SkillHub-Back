@@ -23,16 +23,16 @@ public static class InfrastructureExtensions
             }
         });
 
-        services.AddHostedService<RegisteredUserEventConsumer>(provider => new RegisteredUserEventConsumer(provider,
-            new ConnectionFactory
-            {
-                HostName = configuration["RabbitMQ:Host"],
-                Password = configuration["RabbitMQ:Password"],
-                UserName = configuration["RabbitMQ:UserName"],
-                VirtualHost = configuration["RabbitMQ:VirtualHost"] ?? "/"
-            },
-            configuration["RabbitMQ:Queues:UserRegistered"]
-        ));
+        // services.AddHostedService<RegisteredUserEventConsumer>(provider => new RegisteredUserEventConsumer(provider,
+        //     new ConnectionFactory
+        //     {
+        //         HostName = configuration["RabbitMQ:Host"],
+        //         Password = configuration["RabbitMQ:Password"],
+        //         UserName = configuration["RabbitMQ:UserName"],
+        //         VirtualHost = configuration["RabbitMQ:VirtualHost"] ?? "/"
+        //     },
+        //     configuration["RabbitMQ:Queues:UserRegistered"]
+        // ));
 
         return services;
     }

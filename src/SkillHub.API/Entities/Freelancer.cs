@@ -8,11 +8,18 @@ public interface IAuditableEntity
 
 public class BaseUser : IAuditableEntity
 {
-    public string UserId { get; set; } = null!;
+    public BaseUser(string userId, string userName, string email)
+    {
+        UserId = userId;
+        UserName = userName;
+        Email = email;
+    }
 
-    public string UserName { get; set; } = null!;
+    public string UserId { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string UserName { get; set; }
+
+    public string Email { get; set; }
     
     public string FirstName { get; set; } = null!;
     
@@ -41,6 +48,10 @@ public class Freelancer : BaseUser
         Title = title;
         Bio = bio;
         ProfilePhotoId = profilePhotoId;
+    }
+
+    public Freelancer(string userId, string userName, string email) : base(userId, userName, email)
+    {
     }
 }
 // TODO add work experience table, maybe education also
@@ -73,6 +84,10 @@ public class Client : BaseUser
     public ICollection<Project> Projects { get; set; } = null!;
 
     public ICollection<Review> Reviews { get; set; } = null!;
+
+    public Client(string userId, string userName, string email) : base(userId, userName, email)
+    {
+    }
 }
 
 public class Project

@@ -27,7 +27,7 @@ public class RegisterTests : IDisposable
         var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
         _userDbContext = new UserDbContext(options);
-        _handler = new Register.Handler(_userDbContext, jwtSettings, Mock.Of<IEventProducer>(), configuration);
+        _handler = new Register.Handler(_userDbContext, jwtSettings, configuration);
     }
 
     public void Dispose()
@@ -67,6 +67,8 @@ public class RegisterTests : IDisposable
         var claims = result.Value.Token.ToClaims();
         claims.Should().NotBeNull();
         claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == role.ToString());
+        claims.Should().Contain(c => c.Type == ClaimTypes.Email && c.Value == email);
+        claims.Should().Contain(c => c.Type == ClaimTypes.Name && c.Value == userName);
         claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier);
     }
 

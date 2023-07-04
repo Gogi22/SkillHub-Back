@@ -1,8 +1,6 @@
 using Common.Extensions;
 using Common.Middleware;
-using Identity.API.Attributes;
 using Identity.API.Extensions;
-using Identity.API.Features;
 using Identity.API.Features.Auth;
 using Identity.API.Infrastructure;
 using MediatR;
@@ -15,7 +13,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => options.CustomSchemaIds(type => type.ToString()));
 
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddRabbitMqProducer(builder.Configuration);
 
 builder.Services.AddMediatR(config => { config.RegisterServicesFromAssembly(typeof(Register).Assembly); });
 builder.Services.AddFluentValidation(new[] { typeof(Register.Validator).Assembly });
@@ -51,11 +48,5 @@ app.MapPost("/auth/register",
 app.MapPost("/auth/login",
     async ([FromServices] IMediator mediator, Login.Command model, CancellationToken cancellationToken) =>
         (await mediator.Send(model, cancellationToken)).ToActionResult());
-
-
-app.MapGet("/user/{userId:guid}",
-    [ServiceFilter(typeof(ValidateInternalServiceMiddleware))]
-    async ([FromServices] IMediator mediator, [FromRoute] Guid userId, CancellationToken cancellationToken) =>
-        (await mediator.Send(new GetUser.Query(userId.ToString()), cancellationToken)).ToActionResult()).ExcludeFromDescription();
 
 await app.RunAsync();

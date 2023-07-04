@@ -1,3 +1,4 @@
+using SkillHub.API.Entities;
 using SkillHub.API.Services;
 
 namespace SkillHub.API.Features.ClientProfile.Commands;
@@ -9,7 +10,7 @@ public class UpdateProfile : ICarterModule
         app.MapPut("api/client/profile/",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request, CancellationToken cancellationToken) =>
                 {
-                    request.User = claimsPrincipal.GetUser();
+                    request.Claims = claimsPrincipal.Claims;
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateProfile))
@@ -21,7 +22,7 @@ public class UpdateProfile : ICarterModule
 
     public class Command : IRequest<Result>
     {
-        internal User User { get; set; } = null!;
+        internal IEnumerable<Claim> Claims { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string WebsiteUrl { get; set; } = null!;
@@ -55,21 +56,18 @@ public class UpdateProfile : ICarterModule
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly ApiDbContext _context;
-        private readonly IUserService _userService;
 
-        public Handler(ApiDbContext context, IUserService userService)
+        public Handler(ApiDbContext context)
         {
             _context = context;
-            _userService = userService;
         }
         
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
         {
-            var client = await _userService.GetClientAsync(request.User.Id, cancellationToken);
+            var user = request.Claims.GetUserInfo();
+            var client = await _context.Clients.FirstOrDefaultAsync(c => c.UserId == user.Id, cancellationToken) 
+                         ?? new Client(user.Id, user.UserName, user.Email);
 
-            if (client is null)
-                return DomainErrors.ClientNotFound;
-            
             client.UpdateProfile(request.FirstName, request.LastName, request.WebsiteUrl, request.CompanyName, request.ClientInfo);
             await _context.SaveChangesAsync(cancellationToken);
 

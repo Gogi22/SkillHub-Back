@@ -10,7 +10,7 @@ public class UpdateProfile : ICarterModule
         app.MapPut("api/freelancer/profile/",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request, CancellationToken cancellationToken) =>
                 {
-                    request.User = claimsPrincipal.GetUser();
+                    request.Claims = claimsPrincipal.Claims;
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateProfile))
@@ -22,7 +22,7 @@ public class UpdateProfile : ICarterModule
 
     public class Command : IRequest<Result>
     {
-        internal User User { get; set; } = null!;
+        internal IEnumerable<Claim> Claims { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string Title { get; set; } = null!;
@@ -54,22 +54,20 @@ public class UpdateProfile : ICarterModule
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly ApiDbContext _context;
-        private readonly IUserService _userService;
         private readonly ISkillsService _skillsService;
 
-        public Handler(ApiDbContext context, IUserService userService, ISkillsService skillsService) // TODO remove userService
+        public Handler(ApiDbContext context, ISkillsService skillsService)
         {
             _context = context;
-            _userService = userService;
             _skillsService = skillsService;
         }
         
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
         {
-            var freelancer = await _userService.GetFreelancerAsync(request.User.Id, cancellationToken);
-
-            if (freelancer is null)
-                return DomainErrors.FreelancerNotFound;
+            var user = request.Claims.GetUserInfo();
+            var freelancer = await _context.Freelancers
+                                 .FirstOrDefaultAsync(f => f.UserId == user.Id, cancellationToken)
+                             ?? new Freelancer(user.Id, user.UserName, user.Email);
 
             var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
             if (!skillsResult.IsSuccess)
