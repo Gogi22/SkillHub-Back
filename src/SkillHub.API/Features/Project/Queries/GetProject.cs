@@ -15,7 +15,7 @@ public class GetProject
             .Produces(StatusCodes.Status400BadRequest);
     }
 
-    public class Command : IRequest<Result<Project>>
+    public class Command : IRequest<Result<ProjectDto>>
     {
         public int ProjectId { get; }
 
@@ -25,19 +25,7 @@ public class GetProject
         }
     }
 
-    public class Project
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public decimal Budget { get; set; }
-        public string ProjectStatus { get; set; } = null!;
-        public string ExperienceLevel { get; set; } = null!;
-        public string ClientId { get; set; } = null!;
-        public string? FreelancerId { get; set; }
-    }
-    
-    public class Handler : IRequestHandler<Command, Result<Project>>
+    public class Handler : IRequestHandler<Command, Result<ProjectDto>>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
@@ -48,7 +36,7 @@ public class GetProject
             _mapper = mapper;
         }
         
-        public async Task<Result<Project>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<ProjectDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
                 .AsNoTracking()
@@ -59,7 +47,7 @@ public class GetProject
             if (project is null)
                 return DomainErrors.ProjectNotFound;
 
-            return _mapper.Map<Project>(project);
+            return _mapper.Map<ProjectDto>(project);
         }
     }
 }

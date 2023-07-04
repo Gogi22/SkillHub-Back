@@ -18,7 +18,7 @@ public class GetProfile : ICarterModule
             .Produces(StatusCodes.Status400BadRequest);
     }
 
-    public class Command : IRequest<Result<Profile>>
+    public class Command : IRequest<Result<ProfileDto>>
     {
         public string ClientId { get; }
 
@@ -28,7 +28,7 @@ public class GetProfile : ICarterModule
         }
     }
     
-    public class Profile
+    public class ProfileDto
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
@@ -37,7 +37,7 @@ public class GetProfile : ICarterModule
         public string ClientInfo { get; set; } = null!;
     }
     
-    public class Handler : IRequestHandler<Command, Result<Profile>>
+    public class Handler : IRequestHandler<Command, Result<ProfileDto>>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
@@ -48,7 +48,7 @@ public class GetProfile : ICarterModule
             _mapper = mapper;
         }
 
-        public async Task<Result<Profile>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<ProfileDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var client = await _context.Clients
                 .AsNoTracking()
@@ -57,7 +57,7 @@ public class GetProfile : ICarterModule
             if (client is null)
                 return DomainErrors.ClientNotFound;
 
-            return _mapper.Map<Profile>(client);
+            return _mapper.Map<ProfileDto>(client);
         }
     }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using SkillHub.API.Entities;
 using SkillHub.API.Features.FreelancerProfile.Queries;
 using SkillHub.API.Features.Project.Queries;
+using SkillHub.API.Features.Proposal.Queries;
 
 namespace SkillHub.API.Profiles;
 
@@ -9,13 +10,25 @@ public class DtoProfile : Profile
 {
     public DtoProfile()
     {
-        CreateMap<Project, GetProject.Project>()
+        CreateMap<Project, ProjectDto>()
             .ConstructUsing(project => ProjectEntityToDto(project));
-        CreateMap<Client, Features.ClientProfile.Queries.GetProfile.Profile>()
+        CreateMap<Client, Features.ClientProfile.Queries.GetProfile.ProfileDto>()
             .ConstructUsing(client => ClientEntityToProfileDto(client));
         CreateMap<Freelancer, GetProfile.Profile>()
             .ConstructUsing(freelancer => FreelancerEntityToProfileDto(freelancer));
+        CreateMap<Proposal, GetProposal.ProposalDto>()
+            .ConstructUsing(proposal => ProposalEntityToDto(proposal));
     }
+
+    private static GetProposal.ProposalDto ProposalEntityToDto(Proposal proposal) =>
+        new()
+        {
+            FreelancerId = proposal.FreelancerId,
+            ProjectId = proposal.ProjectId,
+            CoverLetter = proposal.CoverLetter,
+            Status = proposal.Status,
+            CreatedAt = proposal.CreatedAt
+        };
 
     private static GetProfile.Profile FreelancerEntityToProfileDto(Freelancer freelancer)
     {
@@ -30,9 +43,9 @@ public class DtoProfile : Profile
         };
     }
 
-    private static Features.ClientProfile.Queries.GetProfile.Profile ClientEntityToProfileDto(Client client)
+    private static Features.ClientProfile.Queries.GetProfile.ProfileDto ClientEntityToProfileDto(Client client)
     {
-        return new Features.ClientProfile.Queries.GetProfile.Profile
+        return new Features.ClientProfile.Queries.GetProfile.ProfileDto
         {
             ClientInfo = client.ClientInfo,
             FirstName = client.FirstName,
@@ -42,9 +55,9 @@ public class DtoProfile : Profile
         };
     }
 
-    private static GetProject.Project ProjectEntityToDto(Project project)
+    private static ProjectDto ProjectEntityToDto(Project project)
     {
-        return new GetProject.Project
+        return new()
         {
             Budget = project.Budget,
             ClientId = project.ClientId,
@@ -52,7 +65,7 @@ public class DtoProfile : Profile
             ExperienceLevel = project.ExperienceLevel.ToString(),
             FreelancerId = project.FreelancerId,
             Id = project.Id,
-            ProjectStatus = project.ProjectStatus.ToString(),
+            ProjectStatus = project.Status.ToString(),
             Title = project.Title
         };
     }

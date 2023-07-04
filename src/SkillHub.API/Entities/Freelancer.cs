@@ -90,20 +90,27 @@ public class Project
     public string Title { get; set; }
     public string Description { get; set; }
     public decimal Budget { get; set; }
-    public ProjectStatus ProjectStatus { get; set; }
+    public ProjectStatus Status { get; set; }
     public ExperienceLevel ExperienceLevel { get; set; }
     public string ClientId { get; set; }
     public string? FreelancerId { get; set; }
 
     public Client Client { get; set; } = null!;
-    public Freelancer Freelancer { get; set; } = null!;
+    public Freelancer? Freelancer { get; set; }
     public Review? Review { get; set; }
+    public ICollection<Proposal> Proposals { get; } = new List<Proposal>();
     public ICollection<Skill> Skills { get; set; }
+    
+    public void AddProposal(string freelancerId, string coverLetter)
+    {
+        var proposal = new Proposal(freelancerId, Id, coverLetter);
+        Proposals.Add(proposal);
+    }
 }
 
 public enum ProjectStatus
 {
-    NotStarted,
+    AcceptingProposals,
     InProgress,
     Completed,
     Aborted
@@ -116,28 +123,31 @@ public enum ExperienceLevel
     Expert
 }
 
-public class Proposal
+public enum ProposalStatus
 {
-    public Proposal(int proposalId, string freelancerId, int projectId, string userId, string description,
-        DateTime createdAt)
+    Pending,
+    Accepted,
+    Rejected
+}
+
+public class Proposal : IAuditableEntity
+{
+    public Proposal(string freelancerId, int projectId, string coverLetter)
     {
-        ProposalId = proposalId;
         ProjectId = projectId;
-        UserId = userId;
-        Description = description;
-        CreatedAt = createdAt;
+        CoverLetter = coverLetter;
         FreelancerId = freelancerId;
     }
 
     public int ProposalId { get; set; }
     public string FreelancerId { get; set; }
     public int ProjectId { get; set; }
-    public string UserId { get; set; }
-    public string Description { get; set; }
-    public DateTime CreatedAt { get; set; }
-
+    public string CoverLetter { get; set; }
+    public ProposalStatus Status { get; set; } = ProposalStatus.Pending;
     public Project Project { get; set; } = null!;
     public Freelancer Freelancer { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
+    public DateTime ModifiedAt { get; set; }
 }
 
 public class Skill
