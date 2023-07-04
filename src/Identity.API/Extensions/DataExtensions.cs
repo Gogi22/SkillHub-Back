@@ -4,7 +4,8 @@ namespace Identity.API.Extensions;
 
 public static class DataExtensions
 {
-    public static WebApplication ApplyMigrations<T>(this WebApplication app, bool inMemory) where T : DbContext
+    public static WebApplication 
+        ApplyMigrations<T>(this WebApplication app, bool inMemory) where T : DbContext
     {
         if (inMemory)
         {

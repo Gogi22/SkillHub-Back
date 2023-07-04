@@ -14,10 +14,8 @@ public class UserClaimConfiguration : IEntityTypeConfiguration<UserClaim>
         builder.Property(uc => uc.UserId).IsRequired();
         builder.Property(uc => uc.ClaimType).HasMaxLength(256).IsRequired();
         builder.Property(uc => uc.ClaimValue)
-            .HasConversion(
-                s => s.ToString(), // Enum to string conversion
-                s => (Role)Enum.Parse(typeof(Role), s) // String to enum conversion
-            ).IsRequired();
+            .HasConversion<string>()
+            .IsRequired();
 
         builder.HasIndex(uc => new { uc.UserId, uc.ClaimType }).IsUnique();
         builder.HasIndex(uc => uc.UserId);

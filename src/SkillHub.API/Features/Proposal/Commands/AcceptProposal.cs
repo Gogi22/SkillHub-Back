@@ -1,5 +1,3 @@
-using SkillHub.API.Entities;
-
 namespace SkillHub.API.Features.Proposal.Commands;
 
 public class AcceptProposal : ICarterModule
@@ -39,7 +37,7 @@ public class AcceptProposal : ICarterModule
         {
             var proposal = await _context.Proposals
                 .Include(x => x.Project)
-                .FirstOrDefaultAsync(x => x.ProposalId == request.ProposalId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.ProposalId, cancellationToken);
 
             if (proposal is null)
                 return DomainErrors.Proposal.ProposalNotFound;
@@ -47,10 +45,8 @@ public class AcceptProposal : ICarterModule
             if (proposal.Project.ClientId != request.User.Id)
                 return DomainErrors.ClientNotAuthorized;
 
-            proposal.Project.FreelancerId = proposal.FreelancerId;
-            proposal.Project.Status = ProjectStatus.InProgress;
-            proposal.Status = ProposalStatus.Accepted;
-
+            proposal.Accept();
+            
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }

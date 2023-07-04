@@ -55,7 +55,7 @@ public class GetProposal : ICarterModule
             var proposal = await _context.Proposals
                 .AsNoTracking()
                 .Include(p => p.Project)
-                .FirstOrDefaultAsync(p => p.ProposalId == request.ProposalId, cancellationToken);
+                .FirstOrDefaultAsync(p => p.Id == request.ProposalId, cancellationToken);
 
             if (proposal is null)
                 return DomainErrors.Proposal.ProposalNotFound;

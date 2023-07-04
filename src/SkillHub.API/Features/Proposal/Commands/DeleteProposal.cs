@@ -41,7 +41,7 @@ public class DeleteProposal : ICarterModule
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
         {
             var proposal = await _context.Proposals
-                .FirstOrDefaultAsync(x => x.ProposalId == request.ProposalId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.ProposalId, cancellationToken);
 
             if (proposal is null)
                 return DomainErrors.Proposal.ProposalNotFound;

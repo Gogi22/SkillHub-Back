@@ -44,6 +44,4 @@ public class GetSkills : ICarterModule
                 .ToListAsync(cancellationToken);
         }
     }
-}
-
-// TODO remove rabbitmq registered-user queue, add username and email fields to update profile endpoints and save them 
+} 

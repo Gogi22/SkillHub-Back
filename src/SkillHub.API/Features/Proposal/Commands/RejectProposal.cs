@@ -1,5 +1,3 @@
-using SkillHub.API.Entities;
-
 namespace SkillHub.API.Features.Proposal.Commands;
 
 public class RejectProposal : ICarterModule
@@ -39,7 +37,7 @@ public class RejectProposal : ICarterModule
         {
             var proposal = await _context.Proposals
                 .Include(x => x.Project)
-                .FirstOrDefaultAsync(x => x.ProposalId == request.ProposalId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.ProposalId, cancellationToken);
 
             if (proposal is null)
                 return DomainErrors.Proposal.ProposalNotFound;
@@ -47,7 +45,7 @@ public class RejectProposal : ICarterModule
             if (proposal.Project.ClientId != request.User.Id)
                 return DomainErrors.ClientNotAuthorized;
 
-            proposal.Status = ProposalStatus.Rejected;
+            proposal.Reject();
 
             return Result.Success();
         }
