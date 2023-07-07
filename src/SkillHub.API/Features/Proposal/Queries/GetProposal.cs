@@ -12,7 +12,7 @@ public class GetProposal : ICarterModule
                         CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(GetProposal))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Proposal))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
@@ -28,15 +28,6 @@ public class GetProposal : ICarterModule
 
         internal User User { get; set; }
         internal int ProposalId { get; set; }
-    }
-
-    public class ProposalDto
-    {
-        public string FreelancerId { get; set; } = null!;
-        public int ProjectId { get; set; }
-        public string CoverLetter { get; set; } = null!;
-        public ProposalStatus Status { get; set; }
-        public DateTime CreatedAt { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<ProposalDto>>

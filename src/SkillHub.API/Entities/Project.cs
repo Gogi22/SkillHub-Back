@@ -10,6 +10,11 @@ public class Project : BaseEntity<int>
         ClientId = clientId;
         Skills = skills;
     }
+
+    private Project()
+    {
+    }
+
     public string Title { get; set; }
     public string Description { get; set; }
     public decimal Budget { get; set; }
@@ -28,5 +33,29 @@ public class Project : BaseEntity<int>
     {
         var proposal = new Proposal(freelancerId, Id, coverLetter);
         Proposals.Add(proposal);
+    }
+
+    public void Abort()
+    {
+        Status = ProjectStatus.Aborted;
+        foreach (var proposal in Proposals)
+        {
+            proposal.Reject();
+        }
+    }
+
+    public void Update(string title, string description, decimal budget, ExperienceLevel experienceLevel,
+        ICollection<Skill> skills)
+    {
+        Title = title;
+        Description = description;
+        Budget = budget;
+        ExperienceLevel = experienceLevel;
+        Skills = skills;
+    }
+
+    public void Complete()
+    {
+        Status = ProjectStatus.Completed;
     }
 }

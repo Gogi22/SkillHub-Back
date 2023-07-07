@@ -19,7 +19,7 @@ public class Result
 
     public static Result Success()
     {
-        return new Result(true, Error.None);
+        return new Result(true);
     }
 
     public static Result Failure(params Error[] errors)

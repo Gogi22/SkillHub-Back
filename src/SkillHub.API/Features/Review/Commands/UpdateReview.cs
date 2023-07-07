@@ -10,11 +10,11 @@ public class UpdateReview : ICarterModule
                 {
                     request.User = claimsPrincipal.GetUser();
                     request.ReviewId =
-                        reviewId; // when testing, try to remove reviewId from the parameter list and see what happens
+                        reviewId; 
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateReview))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Review))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
@@ -54,6 +54,7 @@ public class UpdateReview : ICarterModule
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
         {
             var review = await _context.Reviews
+                .Include(r => r.Project)
                 .FirstOrDefaultAsync(r => r.Id == request.ReviewId, cancellationToken);
 
             if (review is null)

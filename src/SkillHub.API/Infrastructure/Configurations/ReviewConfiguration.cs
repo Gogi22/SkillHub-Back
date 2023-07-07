@@ -10,9 +10,5 @@ public class ReviewConfiguration : BaseEntityTypeConfiguration<Review, int>
         base.Configure(builder);
 
         builder.Property(r => r.ReviewText).IsRequired().HasMaxLength(2000);
-
-        builder.HasOne(r => r.Project)
-            .WithOne(p => p.Review)
-            .HasForeignKey<Review>(r => r.ProjectId);
     }
 }

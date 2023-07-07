@@ -3,18 +3,19 @@ using SkillHub.API.Services;
 
 namespace SkillHub.API.Features.Project.Commands;
 
-public class CreateProject : ICarterModule
+public class UpdateProject : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/project",
-                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request,
+        app.MapPut("api/project/{projectId:int}",
+                (IMediator mediator, ClaimsPrincipal claimsPrincipal, int projectId, Command request,
                     CancellationToken cancellationToken) =>
                 {
                     request.User = claimsPrincipal.GetUser();
+                    request.ProjectId = projectId;
                     return mediator.Send(request, cancellationToken);
                 })
-            .WithName(nameof(CreateProject))
+            .WithName(nameof(UpdateProject))
             .WithTags(nameof(Project))
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
@@ -24,6 +25,7 @@ public class CreateProject : ICarterModule
     public class Command : IRequest<Result>
     {
         internal User User { get; set; } = null!;
+        internal int ProjectId { get; set; }
         public string Title { get; set; } = null!;
         public int[] SkillIds { get; set; } = null!;
         public ExperienceLevel ExperienceLevel { get; set; }
@@ -61,18 +63,19 @@ public class CreateProject : ICarterModule
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            var client = await _context.Clients
-                .Include(c => c.Projects)
-                .FirstOrDefaultAsync(c => c.Id == request.User.Id, cancellationToken);
-
-            if (client is null)
-                return DomainErrors.ClientNotFound;
+            var project = await _context.Projects
+                .Include(x => x.Skills)
+                .FirstOrDefaultAsync(x => x.Id == request.ProjectId 
+                && x.Status == ProjectStatus.AcceptingProposals, cancellationToken);
+            
+            if (project is null)
+                return DomainErrors.ProjectNotFound;
 
             var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
             if (!skillsResult.IsSuccess)
                 return skillsResult;
-
-            client.AddProject(request.Title, request.Description, request.Budget, request.ExperienceLevel,
+            
+            project.Update(request.Title, request.Description, request.Budget, request.ExperienceLevel,
                 skillsResult.Value!);
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();

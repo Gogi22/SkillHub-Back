@@ -2,7 +2,9 @@ namespace SkillHub.API.Entities;
 
 public class Client : BaseUser
 {
-    public Client(string userId, string userName, string email) : base(userId, userName, email)
+    private Client() : base(){}
+
+    public Client(string id, string userName, string email) : base(id, userName, email)
     {
     }
 
@@ -13,8 +15,6 @@ public class Client : BaseUser
     public string ClientInfo { get; set; } = string.Empty;
 
     public ICollection<Project> Projects { get; set; } = null!;
-
-    public ICollection<Review> Reviews { get; set; } = null!;
 
     public void UpdateProfile(string firstName, string lastName, string websiteUrl, string companyName,
         string clientInfo)
@@ -29,7 +29,7 @@ public class Client : BaseUser
     public void AddProject(string title, string description, decimal budget, ExperienceLevel experienceLevel,
         ICollection<Skill> skills)
     {
-        var project = new Project(title, description, budget, UserId, skills)
+        var project = new Project(title, description, budget, Id, skills)
         {
             ExperienceLevel = experienceLevel
         };

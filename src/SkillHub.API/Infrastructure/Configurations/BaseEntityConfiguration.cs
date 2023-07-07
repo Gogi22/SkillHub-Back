@@ -9,6 +9,8 @@ public class BaseEntityTypeConfiguration<TEntity, TId> : IEntityTypeConfiguratio
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
         builder.HasKey(e => e.Id);
+        builder.Property(p => p.Id)
+            .ValueGeneratedOnAdd();
         builder.Property(e => e.CreatedAt).IsRequired();
         builder.Property(e => e.ModifiedAt).IsRequired();
     }

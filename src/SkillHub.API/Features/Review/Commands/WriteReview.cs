@@ -14,7 +14,7 @@ public class WriteReview : ICarterModule
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(WriteReview))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Review))
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
@@ -54,6 +54,7 @@ public class WriteReview : ICarterModule
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
+                .Include(p => p.Review)
                 .FirstOrDefaultAsync(p => p.Id == request.ProjectId, cancellationToken);
 
             var validationResult = ValidateProjectAndUser(request, project);

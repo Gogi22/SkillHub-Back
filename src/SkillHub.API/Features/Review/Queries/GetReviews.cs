@@ -8,7 +8,7 @@ public class GetReviews : ICarterModule
                 (IMediator mediator, Guid freelancerId) =>
                     mediator.Send(new Command { UserId = freelancerId.ToString() }))
             .WithName(nameof(GetReviews))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Review))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
     }
@@ -48,8 +48,11 @@ public class GetReviews : ICarterModule
         public async Task<Result<List<Review>>> Handle(Command request, CancellationToken cancellationToken)
         {
             var freelancer =
-                await _context.Freelancers.AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.UserId == request.UserId, cancellationToken);
+                await _context.Freelancers
+                    .AsNoTracking()
+                    .Include(x => x.Projects)
+                        .ThenInclude(x => x.Review)
+                    .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
             if (freelancer == null)
                 return DomainErrors.FreelancerNotFound;
 

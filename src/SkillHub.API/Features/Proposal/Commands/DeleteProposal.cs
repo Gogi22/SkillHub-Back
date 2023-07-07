@@ -10,8 +10,8 @@ public class DeleteProposal : ICarterModule
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
                         CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
-            .WithName(nameof(AcceptProposal))
-            .WithTags(nameof(Command))
+            .WithName(nameof(DeleteProposal))
+            .WithTags(nameof(Proposal))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Freelancer);

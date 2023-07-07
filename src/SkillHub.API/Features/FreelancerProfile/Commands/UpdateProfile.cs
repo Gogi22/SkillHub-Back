@@ -14,8 +14,8 @@ public class UpdateProfile : ICarterModule
                     request.Claims = claimsPrincipal.Claims;
                     return mediator.Send(request, cancellationToken);
                 })
-            .WithName(nameof(UpdateProfile))
-            .WithTags(nameof(Command))
+            .WithName("Freelancer.UpdateProfile")
+            .WithTags(nameof(FreelancerProfile))
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Freelancer);
@@ -37,15 +37,19 @@ public class UpdateProfile : ICarterModule
         public Validator()
         {
             RuleFor(p => p.FirstName)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(20);
             RuleFor(p => p.LastName)
+                .MaximumLength(30)
                 .NotEmpty();
             RuleFor(p => p.Title)
+                .MaximumLength(30)
                 .NotEmpty();
             RuleFor(p => p.Bio)
                 .MinimumLength(20)
-                .MaximumLength(2000);
+                .MaximumLength(600);
             RuleFor(p => p.ProfilePhotoId)
+                .MaximumLength(50)
                 .NotEmpty();
             RuleFor(p => p.SkillIds)
                 .NotEmpty();
@@ -67,15 +71,20 @@ public class UpdateProfile : ICarterModule
         {
             var user = request.Claims.GetUserInfo();
             var freelancer = await _context.Freelancers
-                                 .FirstOrDefaultAsync(f => f.UserId == user.Id, cancellationToken)
-                             ?? new Freelancer(user.Id, user.UserName, user.Email);
+                .FirstOrDefaultAsync(f => f.Id == user.Id, cancellationToken);
+                            
+            var newFreelancer = freelancer is null;
+            freelancer ??= new Freelancer(user.Id, user.UserName, user.Email);
 
             var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
             if (!skillsResult.IsSuccess)
                 return skillsResult;
-
+        
             freelancer.UpdateProfile(request.FirstName, request.LastName, request.Bio, request.ProfilePhotoId,
                 request.Title, skillsResult.Value!);
+            
+            if (newFreelancer)
+                await _context.Freelancers.AddAsync(freelancer, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }

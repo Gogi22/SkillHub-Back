@@ -2,7 +2,7 @@ using AutoMapper;
 
 namespace SkillHub.API.Features.Project.Queries;
 
-public class GetProject
+public class GetProject : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -10,7 +10,7 @@ public class GetProject
                 (IMediator mediator, int projectId) =>
                     mediator.Send(new Command(projectId)))
             .WithName(nameof(GetProject))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Project))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
     }

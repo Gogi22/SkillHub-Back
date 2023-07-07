@@ -14,7 +14,7 @@ public class SubmitProposal : ICarterModule
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(SubmitProposal))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Proposal))
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Freelancer);
@@ -57,7 +57,7 @@ public class SubmitProposal : ICarterModule
                 return DomainErrors.Proposal.ProjectNotAcceptingProposals;
 
             var freelancer =
-                await _context.Freelancers.FirstOrDefaultAsync(x => x.UserId == request.User.Id, cancellationToken);
+                await _context.Freelancers.FirstOrDefaultAsync(x => x.Id == request.User.Id, cancellationToken);
             if (freelancer is null)
                 return DomainErrors.FreelancerNotFound;
 

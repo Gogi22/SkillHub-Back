@@ -1,15 +1,16 @@
 using AutoMapper;
+using SkillHub.API.Entities;
 
 namespace SkillHub.API.Features.Project.Queries;
 
-public class GetProjects
+public class GetProjects : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("api/projects",
                 (IMediator mediator) => mediator.Send(new Command()))
             .WithName(nameof(GetProjects))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Project))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
     }
@@ -35,6 +36,7 @@ public class GetProjects
                 .AsNoTracking()
                 .Include(p => p.Skills)
                 .Include(p => p.Review)
+                .Where(x => x.Status == ProjectStatus.AcceptingProposals)
                 .ToListAsync(cancellationToken);
 
             return _mapper.Map<List<ProjectDto>>(projects);

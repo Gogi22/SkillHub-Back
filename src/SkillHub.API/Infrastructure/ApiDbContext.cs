@@ -25,6 +25,12 @@ public class ApiDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<BaseUser>().UseTpcMappingStrategy();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
+        modelBuilder.Entity<Skill>().HasData(
+            new Skill { SkillId = 1, Name = ".Net" },
+            new Skill { SkillId = 2, Name = "React" },
+            new Skill { SkillId = 3, Name = "Java" }
+        );
     }
 }

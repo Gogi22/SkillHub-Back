@@ -1,4 +1,5 @@
 using AutoMapper;
+using SkillHub.API.Entities;
 
 namespace SkillHub.API.Features.ClientProfile.Queries;
 
@@ -6,14 +7,14 @@ public class GetProfile : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/client/profile/{clientId}",
+        app.MapGet("api/client/{clientId}/profile",
                 (IMediator mediator, string clientId, CancellationToken cancellationToken) =>
                 {
                     var request = new Command(clientId);
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(GetProfile))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(ClientProfile))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
     }
@@ -52,7 +53,7 @@ public class GetProfile : ICarterModule
         {
             var client = await _context.Clients
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.UserId == request.ClientId, cancellationToken);
+                .FirstOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
 
             if (client is null)
                 return DomainErrors.ClientNotFound;

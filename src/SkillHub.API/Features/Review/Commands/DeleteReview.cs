@@ -12,7 +12,7 @@ public class DeleteReview : ICarterModule
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(DeleteReview))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Review))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);

@@ -1,4 +1,5 @@
 using AutoMapper;
+using SkillHub.API.Entities;
 
 namespace SkillHub.API.Features.FreelancerProfile.Queries;
 
@@ -6,14 +7,14 @@ public class GetProfile : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/freelancer/profile/{freelancerId}",
+        app.MapGet("api/freelancer/{freelancerId}/profile",
                 (IMediator mediator, string freelancerId, CancellationToken cancellationToken) =>
                 {
                     var request = new Command(freelancerId);
                     return mediator.Send(request, cancellationToken);
                 })
-            .WithName(nameof(GetProfile))
-            .WithTags(nameof(Command))
+            .WithName("Freelancer.GetProfile")
+            .WithTags(nameof(FreelancerProfile))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
     }
@@ -53,7 +54,7 @@ public class GetProfile : ICarterModule
         {
             var freelancer = await _context.Freelancers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.UserId == request.FreelancerId, cancellationToken);
+                .FirstOrDefaultAsync(c => c.Id == request.FreelancerId, cancellationToken);
 
             if (freelancer is null)
                 return DomainErrors.FreelancerNotFound;

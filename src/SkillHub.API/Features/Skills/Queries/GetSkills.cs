@@ -8,7 +8,7 @@ public class GetSkills : ICarterModule
                 (IMediator mediator, CancellationToken cancellationToken) =>
                     mediator.Send(new Command(), cancellationToken))
             .WithName(nameof(GetSkills))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Skills))
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
     }

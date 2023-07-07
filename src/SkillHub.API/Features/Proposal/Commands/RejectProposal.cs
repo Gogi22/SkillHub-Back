@@ -1,18 +1,17 @@
+using SkillHub.API.Entities;
+
 namespace SkillHub.API.Features.Proposal.Commands;
 
 public class RejectProposal : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/proposal/reject",
-                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request,
-                    CancellationToken cancellationToken) =>
-                {
-                    request.User = claimsPrincipal.GetUser();
-                    return mediator.Send(request, cancellationToken);
-                })
+        app.MapPost("api/proposal/{proposalId:int}/reject",
+                (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
+                    CancellationToken cancellationToken) 
+                    => mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(RejectProposal))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Proposal))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
@@ -20,7 +19,13 @@ public class RejectProposal : ICarterModule
 
     public class Command : IRequest<Result>
     {
-        internal User User { get; set; } = null!;
+        public Command(User user, int proposalId)
+        {
+            User = user;
+            ProposalId = proposalId;
+        }
+
+        internal User User { get; set; }
         public int ProposalId { get; set; }
     }
 
@@ -44,6 +49,9 @@ public class RejectProposal : ICarterModule
 
             if (proposal.Project.ClientId != request.User.Id)
                 return DomainErrors.ClientNotAuthorized;
+
+            if (proposal.Status != ProposalStatus.Pending)
+                return DomainErrors.Proposal.ProposalIsNotActive;
 
             proposal.Reject();
 

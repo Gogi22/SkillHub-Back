@@ -14,8 +14,8 @@ public class UpdateProposal : ICarterModule
                     request.ProposalId = proposalId;
                     return mediator.Send(request, cancellationToken);
                 })
-            .WithName(nameof(SubmitProposal))
-            .WithTags(nameof(Command))
+            .WithName(nameof(UpdateProposal))
+            .WithTags(nameof(Proposal))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Freelancer);

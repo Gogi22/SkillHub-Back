@@ -1,9 +1,18 @@
-### Login
+### Login freelancer
 POST {{identity}}/auth/login
 Content-Type: application/json
 
 {
   "userName": "GogiMamu",
+  "password": "GogiMamu1@"
+}
+
+### Login clinet
+POST {{identity}}/auth/login
+Content-Type: application/json
+
+{
+  "userName": "Gogimamu8",
   "password": "GogiMamu1@"
 }
 

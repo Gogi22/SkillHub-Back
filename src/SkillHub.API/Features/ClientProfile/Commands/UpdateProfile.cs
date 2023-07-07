@@ -14,7 +14,7 @@ public class UpdateProfile : ICarterModule
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateProfile))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(ClientProfile))
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
@@ -42,14 +42,20 @@ public class UpdateProfile : ICarterModule
         {
             RuleFor(p => p.WebsiteUrl)
                 .NotEmpty()
+                .MaximumLength(40)
                 .Must(BeAValidUrl)
                 .WithMessage("Please enter a valid URL.");
             RuleFor(p => p.FirstName)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(20);
             RuleFor(p => p.LastName)
+                .MaximumLength(30)
                 .NotEmpty();
             RuleFor(p => p.CompanyName)
+                .MaximumLength(30)
                 .NotEmpty();
+            RuleFor(p => p.ClientInfo)
+                .MaximumLength(500);
         }
     }
 
@@ -65,11 +71,16 @@ public class UpdateProfile : ICarterModule
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken = default)
         {
             var user = request.Claims.GetUserInfo();
-            var client = await _context.Clients.FirstOrDefaultAsync(c => c.UserId == user.Id, cancellationToken)
-                         ?? new Client(user.Id, user.UserName, user.Email);
-
+            var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == user.Id, cancellationToken);
+            var newClient = client is null;
+            client ??= new Client(user.Id, user.UserName, user.Email);
+            
             client.UpdateProfile(request.FirstName, request.LastName, request.WebsiteUrl, request.CompanyName,
                 request.ClientInfo);
+            if (newClient)
+            {
+                await _context.Clients.AddAsync(client, cancellationToken);
+            }
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

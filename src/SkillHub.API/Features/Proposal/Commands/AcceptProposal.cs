@@ -4,15 +4,12 @@ public class AcceptProposal : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/proposal/accept",
-                (IMediator mediator, ClaimsPrincipal claimsPrincipal, Command request,
-                    CancellationToken cancellationToken) =>
-                {
-                    request.User = claimsPrincipal.GetUser();
-                    return mediator.Send(request, cancellationToken);
-                })
+        app.MapPost("api/proposal/{proposalId:int}/accept",
+                (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
+                    CancellationToken cancellationToken) => 
+                    mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(AcceptProposal))
-            .WithTags(nameof(Command))
+            .WithTags(nameof(Proposal))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
@@ -20,7 +17,13 @@ public class AcceptProposal : ICarterModule
 
     public class Command : IRequest<Result>
     {
-        internal User User { get; set; } = null!;
+        public Command(User user, int proposalId)
+        {
+            User = user;
+            ProposalId = proposalId;
+        }
+
+        internal User User { get; set; }
         public int ProposalId { get; set; }
     }
 

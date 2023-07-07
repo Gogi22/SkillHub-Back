@@ -16,13 +16,13 @@ public class DtoProfile : Profile
             .ConstructUsing(client => ClientEntityToProfileDto(client));
         CreateMap<Freelancer, GetProfile.Profile>()
             .ConstructUsing(freelancer => FreelancerEntityToProfileDto(freelancer));
-        CreateMap<Proposal, GetProposal.ProposalDto>()
+        CreateMap<Proposal, ProposalDto>()
             .ConstructUsing(proposal => ProposalEntityToDto(proposal));
     }
 
-    private static GetProposal.ProposalDto ProposalEntityToDto(Proposal proposal)
+    private static ProposalDto ProposalEntityToDto(Proposal proposal)
     {
-        return new GetProposal.ProposalDto
+        return new ProposalDto
         {
             FreelancerId = proposal.FreelancerId,
             ProjectId = proposal.ProjectId,
