@@ -17,12 +17,12 @@ public class ApiDbContext : DbContext
 
     public DbSet<Proposal> Proposals { get; set; } = null!;
     public DbSet<Review> Reviews { get; set; } = null!;
-    
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await base.SaveChangesAsync(cancellationToken);
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BaseUser>().UseTpcMappingStrategy();

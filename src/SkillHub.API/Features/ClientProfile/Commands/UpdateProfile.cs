@@ -74,13 +74,14 @@ public class UpdateProfile : ICarterModule
             var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == user.Id, cancellationToken);
             var newClient = client is null;
             client ??= new Client(user.Id, user.UserName, user.Email);
-            
+
             client.UpdateProfile(request.FirstName, request.LastName, request.WebsiteUrl, request.CompanyName,
                 request.ClientInfo);
             if (newClient)
             {
                 await _context.Clients.AddAsync(client, cancellationToken);
             }
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

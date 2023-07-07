@@ -10,7 +10,7 @@ public class UpdateReview : ICarterModule
                 {
                     request.User = claimsPrincipal.GetUser();
                     request.ReviewId =
-                        reviewId; 
+                        reviewId;
                     return mediator.Send(request, cancellationToken);
                 })
             .WithName(nameof(UpdateReview))

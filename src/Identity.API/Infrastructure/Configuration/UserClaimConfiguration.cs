@@ -1,4 +1,3 @@
-using Common;
 using Identity.API.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

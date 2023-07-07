@@ -8,7 +8,7 @@ public class DeleteProject : ICarterModule
     {
         app.MapDelete("api/project/{projectId:int}",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int projectId,
-                    CancellationToken cancellationToken) => 
+                        CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), projectId), cancellationToken))
             .WithName(nameof(DeleteProject))
             .WithTags(nameof(Project))
@@ -42,11 +42,12 @@ public class DeleteProject : ICarterModule
         {
             var project = await _context.Projects
                 .Include(p => p.Proposals)
-                .FirstOrDefaultAsync(p => p.Id == request.ProjectId && p.Status == ProjectStatus.AcceptingProposals, cancellationToken);
-            
+                .FirstOrDefaultAsync(p => p.Id == request.ProjectId && p.Status == ProjectStatus.AcceptingProposals,
+                    cancellationToken);
+
             if (project is null)
                 return DomainErrors.ProjectNotFound;
-            
+
             if (project.ClientId != request.User.Id)
                 return DomainErrors.ClientNotAuthorized;
 

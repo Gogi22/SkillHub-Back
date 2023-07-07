@@ -2,7 +2,9 @@ namespace SkillHub.API.Entities;
 
 public class Client : BaseUser
 {
-    private Client() : base(){}
+    private Client()
+    {
+    }
 
     public Client(string id, string userName, string email) : base(id, userName, email)
     {

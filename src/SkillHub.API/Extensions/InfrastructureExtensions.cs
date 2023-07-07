@@ -21,7 +21,7 @@ public static class InfrastructureExtensions
         });
 
         services.AddScoped<AuditableEntitiesInterceptor>();
-        
+
         return services;
     }
 }

@@ -65,16 +65,16 @@ public class UpdateProject : ICarterModule
         {
             var project = await _context.Projects
                 .Include(x => x.Skills)
-                .FirstOrDefaultAsync(x => x.Id == request.ProjectId 
-                && x.Status == ProjectStatus.AcceptingProposals, cancellationToken);
-            
+                .FirstOrDefaultAsync(x => x.Id == request.ProjectId
+                                          && x.Status == ProjectStatus.AcceptingProposals, cancellationToken);
+
             if (project is null)
                 return DomainErrors.ProjectNotFound;
 
             var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
             if (!skillsResult.IsSuccess)
                 return skillsResult;
-            
+
             project.Update(request.Title, request.Description, request.Budget, request.ExperienceLevel,
                 skillsResult.Value!);
             await _context.SaveChangesAsync(cancellationToken);

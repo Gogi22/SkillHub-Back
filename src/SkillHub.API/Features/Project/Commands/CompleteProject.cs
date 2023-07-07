@@ -8,7 +8,7 @@ public class CompleteProject : ICarterModule
     {
         app.MapPost("api/project/{projectId:int}/complete",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int projectId,
-                        CancellationToken cancellationToken) => 
+                        CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), projectId), cancellationToken))
             .WithName(nameof(CompleteProject))
             .WithTags(nameof(Project))
@@ -16,9 +16,9 @@ public class CompleteProject : ICarterModule
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization(Policy.Client);
     }
-    
+
     public record Command(User User, int ProjectId) : IRequest<Result>;
-    
+
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly ApiDbContext _context;
@@ -27,7 +27,7 @@ public class CompleteProject : ICarterModule
         {
             _context = context;
         }
-        
+
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
@@ -38,10 +38,10 @@ public class CompleteProject : ICarterModule
 
             if (project.ClientId != request.User.Id)
                 return DomainErrors.ClientNotAuthorized;
-            
+
             if (project.Status != ProjectStatus.InProgress)
                 return DomainErrors.ProjectNotInProgress;
-            
+
             project.Complete();
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();

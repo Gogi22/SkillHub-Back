@@ -3,7 +3,7 @@ using SkillHub.API.Entities;
 
 namespace SkillHub.API.Infrastructure.Configurations;
 
-public class BaseUserConfiguration :  IEntityTypeConfiguration<BaseUser>
+public class BaseUserConfiguration : IEntityTypeConfiguration<BaseUser>
 {
     public void Configure(EntityTypeBuilder<BaseUser> builder)
     {
@@ -18,17 +18,17 @@ public class BaseUserConfiguration :  IEntityTypeConfiguration<BaseUser>
         builder.Property(b => b.FirstName)
             .HasMaxLength(20)
             .IsRequired();
-        
+
         builder.Property(b => b.LastName)
             .HasMaxLength(30)
             .IsRequired();
-        
+
         builder.Property(b => b.Email)
             .HasMaxLength(70)
             .IsRequired();
-        
+
         builder.Property(e => e.CreatedAt).IsRequired();
-        
+
         builder.Property(e => e.ModifiedAt).IsRequired();
     }
 }

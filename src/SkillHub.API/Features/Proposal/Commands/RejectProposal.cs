@@ -8,7 +8,7 @@ public class RejectProposal : ICarterModule
     {
         app.MapPost("api/proposal/{proposalId:int}/reject",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
-                    CancellationToken cancellationToken) 
+                        CancellationToken cancellationToken)
                     => mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(RejectProposal))
             .WithTags(nameof(Proposal))

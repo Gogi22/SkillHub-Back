@@ -6,7 +6,7 @@ public class AcceptProposal : ICarterModule
     {
         app.MapPost("api/proposal/{proposalId:int}/accept",
                 (IMediator mediator, ClaimsPrincipal claimsPrincipal, int proposalId,
-                    CancellationToken cancellationToken) => 
+                        CancellationToken cancellationToken) =>
                     mediator.Send(new Command(claimsPrincipal.GetUser(), proposalId), cancellationToken))
             .WithName(nameof(AcceptProposal))
             .WithTags(nameof(Proposal))
@@ -49,7 +49,7 @@ public class AcceptProposal : ICarterModule
                 return DomainErrors.ClientNotAuthorized;
 
             proposal.Accept();
-            
+
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }

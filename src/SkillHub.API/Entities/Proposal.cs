@@ -8,6 +8,7 @@ public class Proposal : BaseEntity<int>
         CoverLetter = coverLetter;
         FreelancerId = freelancerId;
     }
+
     public string FreelancerId { get; set; }
     public int ProjectId { get; set; }
     public string CoverLetter { get; set; }

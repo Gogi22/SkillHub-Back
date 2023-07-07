@@ -72,17 +72,17 @@ public class UpdateProfile : ICarterModule
             var user = request.Claims.GetUserInfo();
             var freelancer = await _context.Freelancers
                 .FirstOrDefaultAsync(f => f.Id == user.Id, cancellationToken);
-                            
+
             var newFreelancer = freelancer is null;
             freelancer ??= new Freelancer(user.Id, user.UserName, user.Email);
 
             var skillsResult = await _skillsService.GetSkillsFromIds(request.SkillIds, cancellationToken);
             if (!skillsResult.IsSuccess)
                 return skillsResult;
-        
+
             freelancer.UpdateProfile(request.FirstName, request.LastName, request.Bio, request.ProfilePhotoId,
                 request.Title, skillsResult.Value!);
-            
+
             if (newFreelancer)
                 await _context.Freelancers.AddAsync(freelancer, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

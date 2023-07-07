@@ -1,5 +1,4 @@
 using AutoMapper;
-using SkillHub.API.Features.Proposal.Queries;
 
 namespace SkillHub.API.Features.Project.Queries;
 
@@ -29,7 +28,7 @@ public class GetProposals : ICarterModule
         public User User { get; }
         public int ProjectId { get; }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result<List<ProposalDto>>>
     {
         private readonly ApiDbContext _apiDbContext;
@@ -40,7 +39,7 @@ public class GetProposals : ICarterModule
             _apiDbContext = apiDbContext;
             _mapper = mapper;
         }
-        
+
         public async Task<Result<List<ProposalDto>>> Handle(Command request, CancellationToken cancellationToken)
         {
             var project =

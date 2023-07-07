@@ -8,6 +8,7 @@ public class Review : BaseEntity<int>
         Rating = rating;
         ReviewText = reviewText;
     }
+
     public int ProjectId { get; set; }
     public double Rating { get; set; }
     public string ReviewText { get; set; }

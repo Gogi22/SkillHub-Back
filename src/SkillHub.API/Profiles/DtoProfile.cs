@@ -2,7 +2,6 @@ using AutoMapper;
 using SkillHub.API.Entities;
 using SkillHub.API.Features.FreelancerProfile.Queries;
 using SkillHub.API.Features.Project.Queries;
-using SkillHub.API.Features.Proposal.Queries;
 
 namespace SkillHub.API.Profiles;
 

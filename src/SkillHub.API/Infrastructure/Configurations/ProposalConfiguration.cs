@@ -8,7 +8,7 @@ public class ProposalConfiguration : BaseEntityTypeConfiguration<Proposal, int>
     public override void Configure(EntityTypeBuilder<Proposal> builder)
     {
         base.Configure(builder);
-        
+
         builder.Property(p => p.CoverLetter)
             .HasMaxLength(500)
             .IsRequired();

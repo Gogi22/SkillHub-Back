@@ -5,8 +5,10 @@ public class Freelancer : BaseUser
     public Freelancer(string userId, string userName, string email) : base(userId, userName, email)
     {
     }
-    
-    private Freelancer() : base(){}
+
+    private Freelancer()
+    {
+    }
 
     public string Bio { get; set; } = null!;
 

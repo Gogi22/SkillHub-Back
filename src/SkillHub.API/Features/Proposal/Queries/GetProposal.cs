@@ -1,5 +1,4 @@
 using AutoMapper;
-using SkillHub.API.Entities;
 
 namespace SkillHub.API.Features.Proposal.Queries;
 

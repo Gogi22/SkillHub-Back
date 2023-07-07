@@ -51,7 +51,7 @@ public class GetReviews : ICarterModule
                 await _context.Freelancers
                     .AsNoTracking()
                     .Include(x => x.Projects)
-                        .ThenInclude(x => x.Review)
+                    .ThenInclude(x => x.Review)
                     .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
             if (freelancer == null)
                 return DomainErrors.FreelancerNotFound;

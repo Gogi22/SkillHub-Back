@@ -10,7 +10,8 @@ Content-Type: application/json
   "Bio": "this is my bio for a freelancer type",
   "ProfilePhotoId": "ProfileIdString",
   "skillIds": [
-    1, 2
+    1,
+    2
   ]
 }
 
@@ -35,13 +36,15 @@ GET {{api}}/api/client/bec2bb6b-0649-4fce-863e-2b441d3df912/profile
 
 ### Create Project
 POST {{api}}/api/project
-Authorization: {{client-bearer}} 
+Authorization: {{client-bearer}}
 Content-Type: application/json
 
 {
   "title": "string string string st the third junior",
   "skillIds": [
-    3, 1, 2
+    3,
+    1,
+    2
   ],
   "experienceLevel": 0,
   "budget": 100,
@@ -56,7 +59,9 @@ Content-Type: application/json
 {
   "title": "string string string st",
   "skillIds": [
-    3, 1, 2
+    3,
+    1,
+    2
   ],
   "experienceLevel": 0,
   "budget": 1000,

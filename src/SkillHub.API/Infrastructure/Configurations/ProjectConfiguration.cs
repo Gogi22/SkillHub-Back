@@ -8,11 +8,11 @@ public class ProjectConfiguration : BaseEntityTypeConfiguration<Project, int>
     public override void Configure(EntityTypeBuilder<Project> builder)
     {
         base.Configure(builder);
-        
+
         builder.Property(p => p.Title)
             .HasMaxLength(100)
             .IsRequired();
-        
+
         builder.Property(p => p.Description)
             .HasMaxLength(1000)
             .IsRequired();
@@ -37,7 +37,7 @@ public class ProjectConfiguration : BaseEntityTypeConfiguration<Project, int>
             .WithOne(pr => pr.Project)
             .HasForeignKey(pr => pr.ProjectId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.HasOne(r => r.Review)
             .WithOne(p => p.Project)
             .HasForeignKey<Review>(r => r.ProjectId)
