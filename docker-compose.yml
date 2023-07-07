@@ -6,25 +6,30 @@ services:
       context: .
       dockerfile: src/Identity.API/Dockerfile
     ports:
-      - "7654:80"
+      - "8090:80"
     depends_on:
-      - rabbitmq
       - sqlserver
     env_file:
       env.development
+    environment:
+      - SqlServerConnectionString=Server=host.docker.internal;Database=Identity;User Id=sa;Password='YourPassword123!';Trust Server Certificate=true;
     networks:
       - internalNetwork
 
-  rabbitmq:
-    image: rabbitmq:3-management
+  skillhub-api:
+    build:
+      context: .
+      dockerfile: src/SkillHub.API/Dockerfile
     ports:
-      - "5672:5672"  # AMQP port
-      - "15672:15672"  # Management UI port
+      - "8091:80"
+    depends_on:
+      - sqlserver
+    env_file:
+      env.development
     environment:
-      - RABBITMQ_DEFAULT_USER=SkillHubUser
-      - RABBITMQ_DEFAULT_PASS=SkillHubPassword
+      - SqlServerConnectionString=Server=host.docker.internal;Database=SkillHub;User Id=sa;Password='YourPassword123!';Trust Server Certificate=true;
     networks:
-        - internalNetwork
+      - internalNetwork
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest

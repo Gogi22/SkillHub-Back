@@ -8,7 +8,7 @@ COPY ["src/Identity.API/Identity.API.csproj", "Identity.API/"]
 COPY ["src/Common/Common.csproj", "Common/"]
 RUN dotnet restore "Identity.API/Identity.API.csproj"
 COPY src/Common Common/
-COPY src/Identity.API Identity.API
+COPY src/Identity.API Identity.API/
 WORKDIR /src/Identity.API
 RUN dotnet publish "Identity.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
