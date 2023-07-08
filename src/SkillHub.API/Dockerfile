@@ -16,5 +16,10 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV SqlServerConnectionString="Server=host.docker.internal;Database=SkillHub;User Id=sa;Password=YourPassword123!;Trust Server Certificate=true;"
-ENV RabbitMQ__Host=host.docker.internal
+ENV Microservices__Secret="this is my custom Secret key for internal authorization"
+ENV JwtSettings__Key="this is my custom Secret key for authentication"
+ENV JwtSettings__Issuer="http://localhost:7654"
+ENV JwtSettings__Audience="https://localhost:5001"
+ENV UseInMemoryDatabase=false
+ENV ASPNETCORE_ENVIRONMENT=Development
 ENTRYPOINT ["dotnet", "SkillHub.API.dll"]
