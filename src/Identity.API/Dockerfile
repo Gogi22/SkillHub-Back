@@ -16,7 +16,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 #ENV SqlServerConnectionString="Server=host.docker.internal;Database=Identity;User Id=sa;Password=YourPassword123!;Trust Server Certificate=true;"
-ENV SqlServerConnectionString="Server=18.197.144.14;Database=Identity;User Id=sa;Password=YourPassword123!;Trust Server Certificate=true;"
+ENV SqlServerConnectionString="Server=host.docker.internal;Database=Identity;User Id=sa;Password=YourPassword123!;Trust Server Certificate=true;"
 ENV Microservices__Secret="this is my custom Secret key for internal authorization"
 ENV JwtSettings__Key="this is my custom Secret key for authentication"
 ENV JwtSettings__Issuer="http://localhost:7654"
