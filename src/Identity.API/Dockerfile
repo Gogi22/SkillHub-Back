@@ -15,7 +15,6 @@ RUN dotnet publish "Identity.API.csproj" -c Release -o /app/publish /p:UseAppHos
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-#ENV SqlServerConnectionString="Server=host.docker.internal;Database=Identity;User Id=sa;Password=YourPassword123!;Trust Server Certificate=true;"
 ENV SqlServerConnectionString="Server=host.docker.internal;Database=Identity;User Id=sa;Password=YourPassword123!;Trust Server Certificate=true;"
 ENV Microservices__Secret="this is my custom Secret key for internal authorization"
 ENV JwtSettings__Key="this is my custom Secret key for authentication"
