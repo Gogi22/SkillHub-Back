@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  identity-api:
+    build:
+      context: .
+      dockerfile: src/Identity.API/Dockerfile
+    ports:
+      - "8090:80"
+    depends_on:
+      - sqlserver
+    env_file:
+      env.development
+    environment:
+      - SqlServerConnectionString=Server=host.docker.internal;Database=Identity;User Id=sa;Password='YourPassword123!';Trust Server Certificate=true;
+    networks:
+      - internalNetwork
+
+  skillhub-api:
+    build:
+      context: .
+      dockerfile: src/SkillHub.API/Dockerfile
+    ports:
+      - "8091:80"
+    depends_on:
+      - sqlserver
+    env_file:
+      env.development
+    environment:
+      - SqlServerConnectionString=Server=host.docker.internal;Database=SkillHub;User Id=sa;Password='YourPassword123!';Trust Server Certificate=true;
+    networks:
+      - internalNetwork
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    platform: linux/amd64
+    environment:
+      - SA_PASSWORD=YourPassword123!
+      - ACCEPT_EULA=Y
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - internalNetwork
+
+volumes:
+  sqlserver_data:
+
+networks:
+  internalNetwork:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1

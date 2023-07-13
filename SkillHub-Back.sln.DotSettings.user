@@ -1,0 +1,19 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=72be83a5_002D7e34_002D4827_002Da59a_002D7ad31f508287/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ef29f8a5_002D5ba5_002D427f_002D8a01_002D06e8c8dda1ac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LoginTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.LoginTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.RegisterTests.Handle_ValidCredentials_ReturnsSuccessResultWithUserInfo&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.RegisterTests.Handle_DuplicateUser_ReturnsFailureResult&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.RegisterValidatorTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.GetUserTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Helpers.PasswordManagerTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3EC7EF98-4C0E-4109-85BC-46EE7C79E663::net6.0::Identity.API.Tests.Features.Auth.RegisterTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

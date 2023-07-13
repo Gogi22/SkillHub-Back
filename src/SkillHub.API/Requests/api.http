@@ -1,0 +1,153 @@
+### Create or Update Freelancer Profile
+PUT {{api}}/api/freelancer/profile
+Authorization: {{freelancer-bearer}}
+Content-Type: application/json
+
+{
+  "FirstName": "Gogi",
+  "LastName": "Mamutchadze",
+  "Title": "software-engineer",
+  "Bio": "this is my bio for a freelancer type",
+  "ProfilePhotoId": "ProfileIdString",
+  "skillIds": [
+    1,
+    2
+  ]
+}
+
+### Create or Update Client Profile
+PUT {{api}}/api/client/profile
+Authorization: {{client-bearer}}
+Content-Type: application/json
+
+{
+  "FirstName": "Giorgi",
+  "LastName": "Mamuchadze",
+  "WebsiteUrl": "https://www.mywebsite.com",
+  "CompanyName": "SkillHub",
+  "ClientInfo": "ProfileIdString"
+}
+
+### Get Freelancer Profile
+GET {{api}}/api/freelancer/5832de52-41e8-40f1-802e-ade05d326808/profile
+
+### Get Client Profile
+GET {{api}}/api/client/bec2bb6b-0649-4fce-863e-2b441d3df912/profile
+
+### Create Project
+POST {{api}}/api/project
+Authorization: {{client-bearer}}
+Content-Type: application/json
+
+{
+  "title": "string string string st the third junior",
+  "skillIds": [
+    3,
+    1,
+    2
+  ],
+  "experienceLevel": 0,
+  "budget": 100,
+  "description": "string string string lorem ipsum"
+}
+
+### Update Project
+PUT {{api}}/api/project/1
+Authorization: {{client-bearer}}
+Content-Type: application/json
+
+{
+  "title": "string string string st",
+  "skillIds": [
+    3,
+    1,
+    2
+  ],
+  "experienceLevel": 0,
+  "budget": 1000,
+  "description": "string string string lorem ipsum"
+}
+
+### Get Project
+GET {{api}}/api/project/2
+
+### Get Projects
+GET {{api}}/api/projects
+
+### Delete Project
+DELETE {{api}}/api/project/3
+Authorization: {{client-bearer}}
+
+### Submit Proposal
+POST {{api}}/api/proposal
+Authorization: {{freelancer-bearer}}
+Content-Type: application/json
+
+{
+  "projectId": 3,
+  "coverLetter": "this is my cover letter string with enough characters string"
+}
+
+### Update Proposal
+PUT {{api}}/api/proposal/1
+Authorization: {{freelancer-bearer}}
+Content-Type: application/json
+
+{
+  "coverLetter": "this is my modified cover letter for the proposal"
+}
+
+### Get Project Proposals
+GET {{api}}/api/project/1/proposals
+Authorization: {{client-bearer}}
+
+### Get Proposal
+GET {{api}}/api/proposal/1
+Authorization: {{client-bearer}}
+
+### Accept Proposal
+POST {{api}}/api/proposal/1/accept
+Authorization: {{client-bearer}}
+
+### Reject Proposal
+POST {{api}}/api/proposal/1/reject
+Authorization: {{client-bearer}}
+
+### Delete Proposal
+DELETE {{api}}/api/proposal/1
+Authorization: {{freelancer-bearer}}
+
+### Complete Project
+POST {{api}}/api/project/1/complete
+Authorization: {{client-bearer}}
+
+### Write Review
+POST {{api}}/api/review
+Authorization: {{client-bearer}}
+Content-Type: application/json
+
+{
+  "projectId": 1,
+  "rating": 4,
+  "reviewText": "well done!"
+}
+
+### Update Review
+PUT {{api}}/api/review/1
+Authorization: {{client-bearer}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "reviewText": "Great Work!"
+}
+
+### Get Reviews
+GET {{api}}/api/reviews/5832de52-41e8-40f1-802e-ade05d326808
+
+### Delete Review
+DELETE {{api}}/api/review/1
+Authorization: {{client-bearer}}
+
+### Get Skills
+GET {{api}}/api/skills

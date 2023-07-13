@@ -1,0 +1,9 @@
+global using System.Security.Claims;
+global using Carter;
+global using Common;
+global using FluentValidation;
+global using MediatR;
+global using SkillHub.API.Common;
+global using SkillHub.API.Extensions;
+global using Microsoft.EntityFrameworkCore;
+global using SkillHub.API.Infrastructure;
