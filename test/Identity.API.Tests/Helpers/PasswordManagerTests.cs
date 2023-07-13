@@ -1,3 +1,4 @@
+using System.Reflection;
 using Common.Options;
 using Identity.API.Helpers;
 using Identity.API.Tests.TestingHelpers;
@@ -13,9 +14,9 @@ public class PasswordManagerTests
     public PasswordManagerTests(ITestOutputHelper testOutputHelper)
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath("/Users/mamutgog/RiderProjects/SkillHub-Back/src/Identity.API")
-            .AddJsonFile("appsettings.json")
-            .Build();
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
         _jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
     }
 

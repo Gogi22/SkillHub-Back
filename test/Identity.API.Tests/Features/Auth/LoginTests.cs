@@ -18,7 +18,7 @@ public class LoginTests : IDisposable
     public LoginTests()
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath("/Users/mamutgog/RiderProjects/SkillHub-Back/src/Identity.API")
+            .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
         var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
