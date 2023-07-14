@@ -7,6 +7,8 @@ public class FreelancerConfiguration : BaseEntityTypeConfiguration<Freelancer, s
 {
     public override void Configure(EntityTypeBuilder<Freelancer> builder)
     {
+        builder.ToTable("freelancers");
+
         builder.Property(p => p.Bio)
             .HasMaxLength(600)
             .IsRequired();

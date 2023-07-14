@@ -7,6 +7,8 @@ public class ClientConfiguration : BaseEntityTypeConfiguration<Client, string>
 {
     public override void Configure(EntityTypeBuilder<Client> builder)
     {
+        builder.ToTable("clients");
+
         builder.Property(c => c.WebsiteUrl)
             .HasMaxLength(40)
             .IsRequired();

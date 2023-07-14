@@ -12,7 +12,7 @@ public static class InfrastructureExtensions
             var x = bool.TryParse(configuration["UseInMemoryDatabase"], out var inMemory);
             if (x && !inMemory)
             {
-                options.UseSqlServer(configuration["SqlServerConnectionString"]!);
+                options.UseNpgsql(configuration["PostgreSqlConnectionString"]!);
             }
             else
             {

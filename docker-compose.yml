@@ -8,11 +8,12 @@ services:
     ports:
       - "8090:80"
     depends_on:
-      - sqlserver
+      - postgres
     env_file:
       env.development
     environment:
       - SqlServerConnectionString=Server=host.docker.internal;Database=Identity;User Id=sa;Password='YourPassword123!';Trust Server Certificate=true;
+      - PostgreSqlConnectionString=Host=host.docker.internal;Database=identity;Username=identity;Password='IdentityPassword@';
     networks:
       - internalNetwork
 
@@ -23,29 +24,29 @@ services:
     ports:
       - "8091:80"
     depends_on:
-      - sqlserver
+      - postgres
     env_file:
       env.development
     environment:
       - SqlServerConnectionString=Server=host.docker.internal;Database=SkillHub;User Id=sa;Password='YourPassword123!';Trust Server Certificate=true;
+      - PostgreSqlConnectionString=Host=host.docker.internal;Database=skillhub;Username=skillhub;Password='skillhubPassword@';
     networks:
       - internalNetwork
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    ports:
-      - "1433:1433"
-    platform: linux/amd64
+  postgres:
+    image: postgres:latest
     environment:
-      - SA_PASSWORD=YourPassword123!
-      - ACCEPT_EULA=Y
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: myuser
     volumes:
-      - sqlserver_data:/var/opt/mssql
+      - postgresql_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - internalNetwork
 
 volumes:
-  sqlserver_data:
+  postgresql_data:
 
 networks:
   internalNetwork:

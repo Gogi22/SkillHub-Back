@@ -10,7 +10,7 @@ public static class InfrastructureExtensions
             var interceptor = serviceProvider.GetRequiredService<AuditableEntitiesInterceptor>();
             if (x && !inMemory)
             {
-                options.UseSqlServer(configuration["SqlServerConnectionString"]!)
+                options.UseNpgsql(configuration["PostgreSqlConnectionString"]!)
                     .AddInterceptors(interceptor);
             }
             else

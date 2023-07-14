@@ -8,6 +8,7 @@ public class ProjectConfiguration : BaseEntityTypeConfiguration<Project, int>
     public override void Configure(EntityTypeBuilder<Project> builder)
     {
         base.Configure(builder);
+        builder.ToTable("projects");
 
         builder.Property(p => p.Title)
             .HasMaxLength(100)
